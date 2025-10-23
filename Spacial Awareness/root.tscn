@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=3 uid="uid://c2ai7grxjmxjg"]
+
+[ext_resource type="SpriteFrames" uid="uid://c26ef0sts6h01" path="res://assets/tiling/ballistic/rifle/animation.tres" id="1_e0p4o"]
+[ext_resource type="SpriteFrames" uid="uid://ck6e2je6cphoo" path="res://assets/tiling/ballistic/rifle_dual/animation.tres" id="2_2lw0u"]
+[ext_resource type="SpriteFrames" uid="uid://c843nbhmi7476" path="res://assets/tiling/ballistic/rifle_assault/animation.tres" id="3_qwhpj"]
+[ext_resource type="SpriteFrames" uid="uid://c74ehmwdkybrr" path="res://assets/tiling/life_support/life_support/animation.tres" id="4_qt76e"]
+[ext_resource type="SpriteFrames" uid="uid://dxjbd3jdqh6og" path="res://assets/tiling/generator/generator/animation.tres" id="6_sq7yr"]
+[ext_resource type="SpriteFrames" uid="uid://dn1h8322wdyks" path="res://assets/tiling/generator/generator_heavy/animation.tres" id="7_r3r3k"]
+[ext_resource type="SpriteFrames" uid="uid://b0nr6fcvlxm30" path="res://assets/tiling/generator/reactor_micro/animation.tres" id="8_blcw0"]
+[ext_resource type="SpriteFrames" uid="uid://b1wltlw4w6i1o" path="res://assets/tiling/engine/engine/animation.tres" id="9_50g4q"]
+[ext_resource type="SpriteFrames" uid="uid://tnqafdhluvjk" path="res://assets/tiling/projectiles/bullet/animation.tres" id="10_3dlgs"]
+[ext_resource type="SpriteFrames" uid="uid://bn8pb1p2smvv4" path="res://assets/tiling/projectiles/bullet_revolving/animation.tres" id="11_vte5o"]
+[ext_resource type="SpriteFrames" uid="uid://dv0cnnci0nhpi" path="res://assets/tiling/projectiles/slug_precision/animation.tres" id="12_po8fv"]
+[ext_resource type="SpriteFrames" uid="uid://dfm28abe8jcn8" path="res://assets/tiling/projectiles/shot/animation.tres" id="13_ub8w1"]
+[ext_resource type="SpriteFrames" uid="uid://be4kd40qf7t2j" path="res://assets/tiling/life_support/life_support_complex/animation.tres" id="24_la53a"]
+[ext_resource type="Script" uid="uid://0ei4y2ox581x" path="res://tiling.gd" id="54_scpaf"]
+
+[node name="root" type="Node2D"]
+
+[node name="rifle" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, -32)
+sprite_frames = ExtResource("1_e0p4o")
+animation = &"1"
+
+[node name="rifle_dual" type="AnimatedSprite2D" parent="."]
+position = Vector2(64, -32)
+sprite_frames = ExtResource("2_2lw0u")
+animation = &"3"
+
+[node name="rifle_assault" type="AnimatedSprite2D" parent="."]
+position = Vector2(128, -64)
+sprite_frames = ExtResource("3_qwhpj")
+animation = &"1"
+
+[node name="rifle_assault_overlay" type="AnimatedSprite2D" parent="rifle_assault"]
+sprite_frames = ExtResource("3_qwhpj")
+animation = &"overlay_1"
+
+[node name="life_support" type="AnimatedSprite2D" parent="."]
+z_index = 1
+position = Vector2(-16, -32)
+sprite_frames = ExtResource("4_qt76e")
+animation = &"idle"
+
+[node name="life_support_complex" type="AnimatedSprite2D" parent="."]
+position = Vector2(-64, -64)
+sprite_frames = ExtResource("24_la53a")
+animation = &"flicker_t"
+
+[node name="generator" type="AnimatedSprite2D" parent="."]
+position = Vector2(-128, -16)
+sprite_frames = ExtResource("6_sq7yr")
+animation = &"activate"
+frame = 7
+frame_progress = 1.0
+
+[node name="generator_heavy" type="AnimatedSprite2D" parent="."]
+position = Vector2(-192, -32)
+sprite_frames = ExtResource("7_r3r3k")
+animation = &"activate"
+frame = 9
+frame_progress = 1.0
+
+[node name="reactor_micro" type="AnimatedSprite2D" parent="."]
+position = Vector2(-240, -32)
+sprite_frames = ExtResource("8_blcw0")
+animation = &"idle"
+frame = 13
+frame_progress = 0.3736693
+
+[node name="engine" type="AnimatedSprite2D" parent="."]
+position = Vector2(144, 0)
+sprite_frames = ExtResource("9_50g4q")
+animation = &"2"
+
+[node name="bullet" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, -144)
+sprite_frames = ExtResource("10_3dlgs")
+animation = &"none"
+frame_progress = 1.0
+
+[node name="bullet_revolving" type="AnimatedSprite2D" parent="."]
+position = Vector2(-16, -144)
+sprite_frames = ExtResource("11_vte5o")
+animation = &"none"
+frame_progress = 1.0
+
+[node name="slug_precision" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, -176)
+sprite_frames = ExtResource("12_po8fv")
+animation = &"none"
+frame_progress = 1.0
+
+[node name="shot" type="AnimatedSprite2D" parent="."]
+position = Vector2(-16, -176)
+sprite_frames = ExtResource("13_ub8w1")
+animation = &"none"
+frame_progress = 1.0
+
+[node name="tiling" type="Node" parent="."]
+script = ExtResource("54_scpaf")
