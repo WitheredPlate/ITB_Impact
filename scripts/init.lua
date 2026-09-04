@@ -1,4 +1,4 @@
-ffrg_impact_version = "1.0.0"
+ffrg_impact_version = "1.0.1"
 
 local mod = {
     id = "ffrg_impact",
@@ -7,7 +7,7 @@ local mod = {
     version = ffrg_impact_version,
     modApiVersion = "2.8.3",
     gameVersion = "1.2.83",
-    icon = "img/icons/mod_1.0.0.png",
+    icon = "img/icons/mod_version.png",
     dependencies = {
         memedit = "1.2.0",
         modApiExt = "1.23",
