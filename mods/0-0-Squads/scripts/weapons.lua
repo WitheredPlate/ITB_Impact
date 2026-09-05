@@ -1485,7 +1485,7 @@ function ffrg_Science_KO_Telefrag:GetSkillEffect(p1,p2)
     if Board:IsPawnSpace(p2) then
         clear = 1
         local pawn = Board:GetPawn(p2)
-        if not Board:IsDeadly(damage,pawn) or pawn:IsCorpse() then
+        if not Board:IsDeadly(damage,Pawn) or pawn:IsCorpse() then
             clear = 2
         end
     end
@@ -1541,7 +1541,7 @@ function ffrg_Science_KO_Telefrag:GetSkillEffect(p1,p2)
             ret:AddBounce(p1,-1)
             ret:AddBoardShake(0.08)
         end
-        ret:AddDelay(0.15)
+        ret:AddDelay(0.25)
         if id then
             ret:AddScript("Board:GetPawn("..id.."):SetSpace("..p1:GetString()..")")
         end
