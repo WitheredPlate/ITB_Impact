@@ -1651,7 +1651,7 @@ local function ffrg_onPawnIsFrozen(mission, pawn, isFrozen)
 end
 
 local function ffrg_onSkillBuild(mission, pawn, weaponId, p1, p2)
-    if pawn:IsMech() and IsPassiveSkill("ffrg_Passive_IceSupply") then
+    if pawn and pawn:IsMech() and IsPassiveSkill("ffrg_Passive_IceSupply") then
         IceSupplyExceptionID = pawn:GetId()
         IceSupplyExceptionWeapon = weaponId
     else

@@ -48,7 +48,7 @@ if ffrg_impact_dialog_setting == "full" then
 	local repairing = nil
 
 	local function ffrg_RepairTest(pawn, weaponId, p2, bool)
-		if pawn:IsMech() and weaponId == "Skill_Repair" or weaponId == "Skill_Repair_Power" and pawn:GetSpace() == p2 then
+		if pawn and pawn:IsMech() and weaponId == "Skill_Repair" or weaponId == "Skill_Repair_Power" and pawn:GetSpace() == p2 then
 			repairing = pawn:GetId()
 		end
 	end

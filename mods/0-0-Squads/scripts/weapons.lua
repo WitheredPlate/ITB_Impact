@@ -294,7 +294,6 @@ ffrg_Prime_BoulderFlail = Skill:new{
     LinkSound = "",
     Sound = "/impact/dynamic/rock",
     Damage = 1,
-    Rarity = 2,
     Upgrades = 2,
     UpgradeCost = {2,2},
     TipImage = {
@@ -1480,10 +1479,13 @@ function ffrg_Science_KO_Telefrag:GetSkillEffect(p1,p2)
     local damage_space_preview = SpaceDamage(p1, 0)
     local damage = SpaceDamage(p2, self.Damage)
     local clear = 0
+    local id
+    if Pawn then id = Pawn:GetId() end
 
     if Board:IsPawnSpace(p2) then
         clear = 1
-        if not Board:IsDeadly(damage,Pawn) or Board:GetPawn(p2):IsCorpse() then
+        local pawn = Board:GetPawn(p2)
+        if not Board:IsDeadly(damage,pawn) or pawn:IsCorpse() then
             clear = 2
         end
     end
@@ -1539,8 +1541,14 @@ function ffrg_Science_KO_Telefrag:GetSkillEffect(p1,p2)
             ret:AddBounce(p1,-1)
             ret:AddBoardShake(0.08)
         end
-        ret:AddDelay(0.1)
+        ret:AddDelay(0.15)
+        if id then
+            ret:AddScript("Board:GetPawn("..id.."):SetSpace("..p1:GetString()..")")
+        end
         ret:AddDamage(damage)
+        if id then
+            ret:AddScript("Board:GetPawn("..id.."):SetSpace("..p2:GetString()..")")
+        end
         for dir = 0, 3 do
             point = p2 + DIR_VECTORS[dir]
             local damage_outer = SpaceDamage(point,0)
