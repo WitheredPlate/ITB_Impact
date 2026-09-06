@@ -236,11 +236,13 @@ local function ffrg_InflictSeriousDamage(damage, point, config)
                 Board:AddEffect(SoundEffect(point,"props/ice_destroyed"))
             else
                 if pawnType.SoundLocation then
+                    local sound = SpaceDamage(point,0)
                     if pawn:GetHealth() <= damage or damage == DAMAGE_DEATH then
-                        Board:AddEffect(SoundEffect(point,pawnType.SoundLocation.."death"))
+                        sound.sSound = pawnType.SoundLocation.."death"
                     else
-                        Board:AddEffect(SoundEffect(point,pawnType.SoundLocation.."hurt"))
+                        sound.sSound = pawnType.SoundLocation.."hurt"
                     end
+                    Board:DamageSpace(sound)
                 end
                 if damage ~= DAMAGE_DEATH then
                     pawn:ModifyHealth(damage*-1,true,0)
@@ -269,7 +271,9 @@ local function ffrg_InflictSeriousDamage(damage, point, config)
             Board:DamageSpace(point,damage)
         end
         if config.sfx ~= "" then
-            Board:AddEffect(SoundEffect(point, config.sfx))
+            local sound = SpaceDamage(point,0)
+            sound.sSound = config.sfx
+            Board:DamageSpace(sound)
         end
         if config.anim ~= "" then
             Board:AddAnimation(point, config.anim, 1)
@@ -366,7 +370,7 @@ local function ffrg_AppendSeriousDamage(ret, damage, point, config)
     elseif config.type == "bump" or config.type == "blast" then
         local max = Board:GetMaxHealth(point)
         local current = Board:GetHealth(point)
-        local builDamage = math.min(tempDamage,max)
+        local builDamage = math.min(tempDamage,current)
         if config.stupidBuilding or block == 0 or (block > 0 and damage == DAMAGE_DEATH) then
             if Board:GetUniqueBuilding(point) and Board:GetUniqueBuilding(point) ~= "" then
                 WeaponPreview:AddAnimation(point, "ffrg_buildingPreview_damage_special")

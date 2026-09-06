@@ -342,7 +342,7 @@ ffrg_Prime_Shred = Skill:new{
 }
 
 ffrg_Prime_Shred_A = ffrg_Prime_Shred:new{
-    UpgradeDescription = "Damages the target an additional time.",
+    UpgradeDescription = "Increases the number of attacks by 1.",
     Attacks = 5,
     TipDamageCustom = "1x5",
     StartAnimation = "ffrg_Saw5",

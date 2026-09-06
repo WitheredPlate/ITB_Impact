@@ -1228,7 +1228,7 @@ ffrg_Science_KO_Shred = Skill:new{
 }
 
 ffrg_Science_KO_Shred_A = ffrg_Science_KO_Shred:new{
-    UpgradeDescription = "Damages the target an additional time.",
+    UpgradeDescription = "Increases the number of attacks by 1.",
     Attacks = 2,
     TipDamageCustom = "1x2",
     TipImage = {

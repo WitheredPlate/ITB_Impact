@@ -30,6 +30,8 @@ local path = mod_loader.mods[modApi.currentMod].resourcePath
 local imagePath = path .."img/"
 
 local files = {
+    "effects/ffrg_chomp_main.png",
+    "effects/ffrg_chomp_alt.png",
     "effects/ffrg_explo_bomberbug1_U.png",
     "effects/ffrg_explo_bomberbug1_R.png",
     "effects/ffrg_explo_bomberbug1_D.png",
@@ -138,6 +140,21 @@ ANIMS.ffrg_ExploBomberbugB_3 = Animation:new{
     PosX = -41,
     PosY = -14
 }
+ANIMS.ffrg_Chomp1 = Animation:new{
+    Image = "effects/ffrg_chomp_main.png",
+    NumFrames = 8,
+    Lengths = {0.035,0.035,0.035,0.035,0.025,0.025,0.025,0.025},
+    PosX = -18,
+    PosY = -2
+}
+ANIMS.ffrg_Chomp2 = Animation:new{
+    Image = "effects/ffrg_chomp_alt.png",
+    NumFrames = 8,
+    Lengths = {0.035,0.035,0.035,0.035,0.025,0.025,0.025,0.025},
+    Time = 0.035,
+    PosX = -20,
+    PosY = -2
+}
 
 --////////////////////////////////--
 
@@ -241,10 +258,11 @@ ffrg_CaterpillarAtk1 = Skill:new{
     Damage2 = 2,
     TipDamageCustom = "2x2",
     Attacks = 2,
+    Delay = 0.35,
     LaunchSound = "",
     Sound = "/enemy/hornet_1/attack",
-    Animation = "ffrg_Swipe1",
-    AlternateAnimation = "ffrg_Swipe2",
+    Animation = "ffrg_Chomp1",
+    AlternateAnimation = "ffrg_Chomp2",
     TipImage = {
         Unit = Point(2,2),
         Enemy = Point(2,1),
@@ -252,6 +270,8 @@ ffrg_CaterpillarAtk1 = Skill:new{
         CustomPawn = "ffrg_Caterpillar1"
     }
 }
+
+local melee_delay = 0.06
 
 function ffrg_CaterpillarAtk1:GetSkillEffect(p1, p2)
     local ret = SkillEffect()
@@ -261,7 +281,24 @@ function ffrg_CaterpillarAtk1:GetSkillEffect(p1, p2)
         damage.iSmoke = EFFECT_CREATE
     end
     ret:AddDamage(damage)
-    ffrg_Multihit.MultihitMelee(self.Damage2, self.Attacks, p2, {mode = "simple", queued = true, origin = p1, ret = ret, delay = 0.25, sfx = self.Sound, anim = self.Animation, anim_alt = self.AlternateAnimation, force_ice = true})
+    local multihit = ffrg_Multihit.MultihitMelee(self.Damage2, self.Attacks, p2, {mode = "dissect", queued = true, origin = p1, ret = ret, delay = self.Delay, sfx = self.Sound, anim = self.Animation, anim_alt = self.AlternateAnimation, force_ice = true})
+    local melee = SpaceDamage(p2,0)
+    ret:AddQueuedMelee(p1, melee,NO_DELAY)
+    ret:AddQueuedDelay(melee_delay)
+    for i = 1, #multihit do
+        if i%2 == 0 then
+            ret:AddQueuedDelay(multihit[i]-melee_delay)
+            ret:AddQueuedMelee(p1, melee,NO_DELAY)
+            ret:AddQueuedDelay(melee_delay)
+        else
+            if i%4 == 1 then
+                multihit[i].sAnimation = self.Animation
+            else
+                multihit[i].sAnimation = self.AlternateAnimation
+            end
+            ret:AddQueuedDamage(multihit[i])
+        end
+    end
     return ret
 end
 
@@ -286,6 +323,7 @@ ffrg_CaterpillarAtkB = ffrg_CaterpillarAtk1:new{
     Smoke = true,
     Damage2 = 2,
     Attacks = 3,
+    Delay = 0.3,
     TipImage = {
         Unit = Point(2,2),
         Enemy = Point(2,1),

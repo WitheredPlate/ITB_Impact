@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.0.0"
+local VERSION = "1.0.2"
 
 --## A library for showing previewed additions to queued attacks. Supports alternatives for whether or not the attack is selected.
 --## This library can do certain things WeaponPreview can't for queued attacks and will catch certain bugs that WeaponPreview doesn't, but it is far less flexible, has more limitations, and is marginally harder to use.
@@ -104,11 +104,6 @@ end
 local function ffrg_onQueuedFinalEffectStart(mission, pawn, weaponId, p1, p2, p3)
     ffrg_QueuedActConclude(pawn)
 end
-
-modapiext.events.onSkillBuild:subscribe(ffrg_onTargetAreaBuild)
-modapiext.events.onFinalEffectBuild:subscribe(ffrg_onSecondTargetAreaBuild)
-modapiext.events.onQueuedSkillStart:subscribe(ffrg_onQueuedSkillStart)
-modapiext.events.onQueuedFinalEffectStart:subscribe(ffrg_onQueuedFinalEffectStart)
 
 local function ffrg_IsFocused(boardTemp, pawn, tipDuration)
     if boardTemp:IsTipImage() then
@@ -250,11 +245,6 @@ local function ffrg_onNextTurn(mission)
     Board.ffrg_QueuedReady = false
 end
 
-modApi.events.onMissionUpdate:subscribe(ffrg_onMissionUpdate)
-modApi.events.onFrameDrawStart:subscribe(ffrg_onFrameDrawStart)
-modApi.events.onMissionStart:subscribe(ffrg_onMissionStart)
-modApi.events.onNextTurn:subscribe(ffrg_onNextTurn)
-
 
 --////////////////////////////////--
 
@@ -270,6 +260,16 @@ modApi.events.onNextTurn:subscribe(ffrg_onNextTurn)
 local function initialize()
     ffrg_QueuedPreview.AddQueuedSet = ffrg_AddQueuedSet
     ffrg_QueuedPreview.Version = VERSION
+
+    modapiext.events.onSkillBuild:subscribe(ffrg_onTargetAreaBuild)
+    modapiext.events.onFinalEffectBuild:subscribe(ffrg_onSecondTargetAreaBuild)
+    modapiext.events.onQueuedSkillStart:subscribe(ffrg_onQueuedSkillStart)
+    modapiext.events.onQueuedFinalEffectStart:subscribe(ffrg_onQueuedFinalEffectStart)
+
+    modApi.events.onMissionUpdate:subscribe(ffrg_onMissionUpdate)
+    modApi.events.onFrameDrawStart:subscribe(ffrg_onFrameDrawStart)
+    modApi.events.onMissionStart:subscribe(ffrg_onMissionStart)
+    modApi.events.onNextTurn:subscribe(ffrg_onNextTurn)
 end
 
 if ffrg_QueuedPreview then

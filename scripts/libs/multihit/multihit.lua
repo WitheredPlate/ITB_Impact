@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.2.3"
+local VERSION = "1.2.4"
 
 --## A library of functions for attacks that strike or fire projectiles multiple times in a row ##--
 
@@ -32,6 +32,14 @@ local VERSION = "1.2.3"
 
 --## seriousDamage.lua 1.1.4
 --## weaponPreview.lua 3.1.3
+
+
+---------------------------
+-- Optional Dependencies --
+---------------------------
+
+--## queuedPreview.lua 1.0.0
+--## customProjectile.lua 1.0.1
 
 
 ----------------------
@@ -965,7 +973,9 @@ local function MultihitMelee(damage, attacks, point, config)
                 local dir = GetDirection(config.origin - point)
                 local iconArray = {}
                 QueuedDamageIconAdd(icon, dir, point, iconArray)
-                ffrg_QueuedPreview.AddQueuedSet(Board:GetPawn(config.origin):GetId(),iconArray)
+                if ffrg_QueuedPreview then
+                    ffrg_QueuedPreview.AddQueuedSet(Board:GetPawn(config.origin):GetId(),iconArray)
+                end
             end
 
             if config.mode == "dissect" then
@@ -1838,7 +1848,9 @@ local function MultihitProjectile(damage, attacks, point, dir, config)
                 end
             end
             if config.queued and queued_anims ~= {} and config.origin and Board:IsPawnSpace(config.origin) then
-                ffrg_QueuedPreview.AddQueuedSet(Board:GetPawn(config.origin):GetId(),queued_anims)
+                if ffrg_QueuedPreview then
+                    ffrg_QueuedPreview.AddQueuedSet(Board:GetPawn(config.origin):GetId(),queued_anims)
+                end
             end
             if not config.queued and config.projectile_speed and ffrg_WorldConstants then
                 ffrg_WorldConstants:resetSpeed(config.ret)
