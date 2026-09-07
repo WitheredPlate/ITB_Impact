@@ -1697,9 +1697,6 @@ local function MultihitProjectile(damage, attacks, point, dir, config)
                         local pawnType = _G[Board:GetPawn(curr):GetType()]
                         if pawnType and pawnType.Pushable == nil or pawnType.Pushable == true then
                             tile.bonus_damage = tile.bonus_damage + tile.bonus_bonk
-                            if tile.shots > 0 and tile.bonus_bonk > 0 then
-                                tile.bonus_damage = tile.bonus_damage - 1
-                            end
                             ffrg_SeriousDamage.AppendSeriousDamage(config.ret, tile.bonus_damage, curr, {queued = config.queued, preview = true, type = "stupid"})
                         elseif config.origin and Board:IsPawnSpace(config.origin) and pawnType and tile.bump_damage > 0 then
                             local pawn = Board:GetPawn(config.origin)

@@ -221,7 +221,7 @@ ffrg_BomberbugAtk2 = ffrg_BomberbugAtk1:new{
     TipImage = {
         Unit = Point(2,4),
         Enemy = Point(2,2),
-        Target = Point(2,2),
+        Target = Point(2,3),
         Length = 5,
         CustomPawn = "ffrg_Bomberbug2"
     }
@@ -239,7 +239,7 @@ ffrg_BomberbugAtkB = ffrg_BomberbugAtk1:new{
     TipImage = {
         Unit = Point(2,3),
         Enemy = Point(2,1),
-        Target = Point(2,1),
+        Target = Point(2,2),
         Length = 5,
         CustomPawn = "ffrg_BomberbugBoss"
     }
