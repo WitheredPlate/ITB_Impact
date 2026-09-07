@@ -674,4 +674,15 @@ ffrg_BastionAB = ffrg_Bastion:new{
     Armor = true
 }
 
+-- Web turn loss protection
+local function ffrg_onPawnIsGrappled(mission,pawn,isGrappled)
+    local type = pawn:GetType()
+    if not isGrappled and (type == "ffrg_Bastion" or type == "ffrg_BastionA" or type == "ffrg_BastionB" or type == "ffrg_BastionAB") then
+        pawn:SetActive(true)
+    end
+end
+
+modapiext.events.onPawnIsGrappled:subscribe(ffrg_onPawnIsGrappled)
+
+
 --////////////////////////////////--
