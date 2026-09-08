@@ -1499,7 +1499,7 @@ ffrg_Support_MountedArmaments = Skill:new{
 }
 
 ffrg_Support_MountedArmaments_A = ffrg_Support_MountedArmaments:new{
-    Limited = 1
+    Limited = 2
 }
 
 ffrg_Support_MountedArmaments_B = ffrg_Support_MountedArmaments:new{
