@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.1.4"
+local VERSION = "1.1.5"
 
 --## A library for applying damage and healing that ignores all damage modifiers and does not trigger damage-reliant effects
 
@@ -236,18 +236,16 @@ local function ffrg_InflictSeriousDamage(damage, point, config)
                 Board:AddEffect(SoundEffect(point,"props/ice_destroyed"))
             else
                 if pawnType.SoundLocation then
-                    local sound = SpaceDamage(point,0)
-                    if pawn:GetHealth() <= damage or damage == DAMAGE_DEATH then
-                        sound.sSound = pawnType.SoundLocation.."death"
-                    else
+                    if pawn:GetHealth() > damage and damage ~= DAMAGE_DEATH then
+                        local sound = SpaceDamage(point,0)
                         sound.sSound = pawnType.SoundLocation.."hurt"
+                        Board:DamageSpace(sound)
                     end
-                    Board:DamageSpace(sound)
                 end
-                if damage ~= DAMAGE_DEATH then
+                if damage ~= DAMAGE_DEATH and pawn:GetHealth() > damage then
                     pawn:ModifyHealth(damage*-1,true,0)
                 else
-                    pawn:ModifyHealth(pawn:GetHealth()*-1,true,0)
+                    pawn:Kill(false)
                 end
             end
         elseif config.type == "bump" then

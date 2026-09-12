@@ -466,6 +466,7 @@ ffrg_Prime_Maul = Skill:new{
     ImpactSound2 = "/mech/brute/doubletank_mech/death",
     Animation = "ffrg_Explo_Hammer_",
     Upgrades = 1,
+    Limited = 1,
     UpgradeCost = {3},
     TipImage = {
         Unit = Point(2,2),
@@ -478,7 +479,7 @@ ffrg_Prime_Maul = Skill:new{
 
 ffrg_Prime_Maul_A = ffrg_Prime_Maul:new{
     UpgradeDescription = "Increases uses per battle by 1.",
-    Uses = 2
+    Limited = 2
 }
 
 Weapon_Texts.ffrg_Prime_Maul_Upgrade1 = "+1 Use"
