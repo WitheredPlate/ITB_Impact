@@ -10,7 +10,7 @@
 --## Sponsor: Harmony Reclamation
 
 --## Evelyn Moore is a middle-aged wartime, terrorist, and general conflict ambassador.
---## She has experience in, was trained in, and is comfortable real combat.
+--## She has experience in, was trained in, and is comfortable in real combat.
 --## She has successfully negotiated numerous hostage situations, brokered several treaties, and played a significant part in the end of at least one major war.
 --## She is well-known through a variety of avenues, but particularly so within her sponsor corporation, Harmony Reclamation.
 --## Evelyn was present on Harmony Reclamation before the Vek Outbreak to hash out the details of a hostile raider land division deal with CEO Powell.

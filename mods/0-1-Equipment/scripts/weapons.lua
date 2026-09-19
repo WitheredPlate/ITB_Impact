@@ -334,9 +334,9 @@ ffrg_Prime_Shred = Skill:new{
     Upgrades = 2,
     UpgradeCost = {1,3},
     TipImage = {
-        Unit = Point(2,2),
-        Enemy = Point(2,1),
-        Target = Point(2,1),
+        Unit = Point(2,3),
+        Enemy = Point(2,2),
+        Target = Point(2,2),
         Length = 4.5,
     }
 }
@@ -469,10 +469,10 @@ ffrg_Prime_Maul = Skill:new{
     Limited = 1,
     UpgradeCost = {3},
     TipImage = {
-        Unit = Point(2,2),
-        Enemy = Point(2,1),
-        Enemy2 = Point(3,1),
-        Target = Point(2,1),
+        Unit = Point(2,3),
+        Enemy = Point(2,2),
+        Enemy2 = Point(3,2),
+        Target = Point(2,2),
         Length = 5.5
     }
 }
@@ -1187,6 +1187,7 @@ function ffrg_Ranged_Sawblade:GetSkillEffect(p1,p2)
     local shadow = SpaceDamage(p2,0)
     artillery.sSound = self.HitSound
     shadow.sAnimation = self.SawAnimation
+    ret:AddBounce(p1,2)
     ret:AddArtillery(p1 + Point(-24,0), artillery, self.SawArt, NO_DELAY)
     ret:AddArtillery(shadow,"effects/ffrg_nil.png", NO_DELAY)
     ret:AddDelay(0.85)
@@ -1203,6 +1204,7 @@ function ffrg_Ranged_Sawblade:GetSkillEffect(p1,p2)
     end
     ret:AddDelay(0.2)
     ret:AddDamage(SoundEffect(p2,self.ShatterSound))
+    ret:AddBounce(p2,-2)
     for i = 0, 3 do
         local offset = p2+DIR_VECTORS[i]
         if Board:IsValid(offset) then
@@ -1417,9 +1419,9 @@ ffrg_Support_Supply = Skill:new{
     UpgradeCost = { 2 },
     TipImage = {
         CustomPawn = "ScienceMech",
-        Unit = Point(2,2),
-        Target = Point(2,1),
-        Enemy = Point(2,1),
+        Unit = Point(2,3),
+        Target = Point(2,2),
+        Enemy = Point(2,2),
     }
 }
 
@@ -1500,10 +1502,12 @@ ffrg_Support_MountedArmaments = Skill:new{
 }
 
 ffrg_Support_MountedArmaments_A = ffrg_Support_MountedArmaments:new{
+    UpgradeDescription = "Increases uses per battle by 1.",
     Limited = 2
 }
 
 ffrg_Support_MountedArmaments_B = ffrg_Support_MountedArmaments:new{
+    UpgradeDescription = "Increases damage by 1.",
     Damage = 2
 }
 

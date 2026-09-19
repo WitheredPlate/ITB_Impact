@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.0.2"
+local VERSION = "1.0.3"
 
 --## A library for showing previewed additions to queued attacks. Supports alternatives for whether or not the attack is selected.
 --## This library can do certain things WeaponPreview can't for queued attacks and will catch certain bugs that WeaponPreview doesn't, but it is far less flexible, has more limitations, and is marginally harder to use.
@@ -114,8 +114,10 @@ local function ffrg_IsFocused(boardTemp, pawn, tipDuration)
     else
         if not boardTemp:IsBusy() and pawn:GetSpace() then
             local point = pawn:GetSpace()
-            if boardTemp:IsHighlighted(point) and not ( WeaponPreview:IsSkillEffectMarker() or WeaponPreview:IsFinalEffectMarker() ) then
-                return true
+            if boardTemp:IsHighlighted(point) then
+                if not Board:GetSelectedPawn() or not Board:GetSelectedPawn():IsWeaponArmed() or Board:GetSelectedPawn():GetArmedWeaponId() == 0 then
+                    return true
+                end
             end
         end
         if Game:GetTeamTurn() == TEAM_PLAYER and pawn:IsSelected() and boardTemp.ffrg_QueuedReady  then

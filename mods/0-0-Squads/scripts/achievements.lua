@@ -6,24 +6,24 @@
 local path = mod_loader.mods[modApi.currentMod].resourcePath
 
 local files = {
-    "Squad_Architects_1.png",
-    "Squad_Architects_2.png",
-    "Squad_Architects_3.png",
-    "Squad_Architects_1_Gray.png",
-    "Squad_Architects_2_Gray.png",
-    "Squad_Architects_3_Gray.png",
-    "Squad_Frenzy_1.png",
-    "Squad_Frenzy_2.png",
-    "Squad_Frenzy_3.png",
-    "Squad_Frenzy_1_Gray.png",
-    "Squad_Frenzy_2_Gray.png",
-    "Squad_Frenzy_3_Gray.png",
-    "Squad_Colossi_1.png",
-    "Squad_Colossi_2.png",
-    "Squad_Colossi_3.png",
-    "Squad_Colossi_1_Gray.png",
-    "Squad_Colossi_2_Gray.png",
-    "Squad_Colossi_3_Gray.png"
+    "ffrg_Squad_Architects_1.png",
+    "ffrg_Squad_Architects_2.png",
+    "ffrg_Squad_Architects_3.png",
+    "ffrg_Squad_Architects_1_Gray.png",
+    "ffrg_Squad_Architects_2_Gray.png",
+    "ffrg_Squad_Architects_3_Gray.png",
+    "ffrg_Squad_Frenzy_1.png",
+    "ffrg_Squad_Frenzy_2.png",
+    "ffrg_Squad_Frenzy_3.png",
+    "ffrg_Squad_Frenzy_1_Gray.png",
+    "ffrg_Squad_Frenzy_2_Gray.png",
+    "ffrg_Squad_Frenzy_3_Gray.png",
+    "ffrg_Squad_Colossi_1.png",
+    "ffrg_Squad_Colossi_2.png",
+    "ffrg_Squad_Colossi_3.png",
+    "ffrg_Squad_Colossi_1_Gray.png",
+    "ffrg_Squad_Colossi_2_Gray.png",
+    "ffrg_Squad_Colossi_3_Gray.png"
 }
 
 for _, file in ipairs(files) do
@@ -47,7 +47,7 @@ local achievements = {
         id = "ffrg_Bottomless_Munitions",
         name = "Bottomless Munitions",
         tooltip = "Use Mech Equipment that has limited uses 7 times within one Mission.",
-        image = path.."img/achievements/Squad_Architects_1.png",
+        image = path.."img/achievements/ffrg_Squad_Architects_1.png",
         objective = 1,
         squad = "ffrg_Architects",
     },
@@ -55,7 +55,7 @@ local achievements = {
         id = "ffrg_The_Sun",
         name = "The Sun",
         tooltip = "Deal at least 14 damage to Enemy Units with one shot of the Prism Laser.",
-        image = path.."img/achievements/Squad_Architects_2.png",
+        image = path.."img/achievements/ffrg_Squad_Architects_2.png",
         objective = 1,
         squad = "ffrg_Architects",
     },
@@ -63,7 +63,7 @@ local achievements = {
         id = "ffrg_A_Veritable_Army",
         name = "A Veritable Army",
         tooltip = "Have 9 or more Allied, Controllable Units on the field at once.",
-        image = path.."img/achievements/Squad_Architects_3.png",
+        image = path.."img/achievements/ffrg_Squad_Architects_3.png",
         objective = 1,
         squad = "ffrg_Architects",
     },
@@ -71,7 +71,7 @@ local achievements = {
         id = "ffrg_Ceaseless",
         name = "Ceaseless",
         tooltip = "Revive Mechs from destruction 15 times in one Island.",
-        image = path.."img/achievements/Squad_Frenzy_1.png",
+        image = path.."img/achievements/ffrg_Squad_Frenzy_1.png",
         objective = 1,
         squad = "ffrg_Frenzy",
     },
@@ -79,7 +79,7 @@ local achievements = {
         id = "ffrg_A_Light_Tan",
         name = "A Light Tan",
         tooltip = "Take 6 Fire Damage to Mechs in one Mission.",
-        image = path.."img/achievements/Squad_Frenzy_2.png",
+        image = path.."img/achievements/ffrg_Squad_Frenzy_2.png",
         objective = 1,
         squad = "ffrg_Frenzy",
     },
@@ -87,7 +87,7 @@ local achievements = {
         id = "ffrg_Herculean_Toss",
         name = "Herculean Toss",
         tooltip = "Toss 3 Enemy Units at once with Myriad Appendages.",
-        image = path.."img/achievements/Squad_Frenzy_3.png",
+        image = path.."img/achievements/ffrg_Squad_Frenzy_3.png",
         objective = 1,
         squad = "ffrg_Frenzy",
     },
@@ -95,7 +95,7 @@ local achievements = {
         id = "ffrg_Diffusion",
         name = "Diffusion",
         tooltip = "Deal 12 instances of damage to Enemies in a single turn.",
-        image = path.."img/achievements/Squad_Colossi_1.png",
+        image = path.."img/achievements/ffrg_Squad_Colossi_1.png",
         objective = 1,
         squad = "ffrg_SeismicColossi",
     },
@@ -103,7 +103,7 @@ local achievements = {
         id = "ffrg_Imprisoned",
         name = "Imprisoned",
         tooltip = "Competely immobilize an Enemy Unit on its turn using only terrain and Inanimate Units.",
-        image = path.."img/achievements/Squad_Colossi_2.png",
+        image = path.."img/achievements/ffrg_Squad_Colossi_2.png",
         objective = 1,
         squad = "ffrg_SeismicColossi",
     },
@@ -111,7 +111,7 @@ local achievements = {
         id = "ffrg_A_Friend_Inside_You",
         name = "A Friend Inside You",
         tooltip = "Telefrag into Enemy Leaders with Invasive Warp 3 times within a game.",
-        image = path.."img/achievements/Squad_Colossi_3.png",
+        image = path.."img/achievements/ffrg_Squad_Colossi_3.png",
         objective = 1,
         squad = "ffrg_SeismicColossi",
     }
@@ -366,7 +366,7 @@ local function ffrg_onMissionStart2(mission)
         GAME.ffrg_FireDamageCount = 0
         achievements.ffrg_A_Light_Tan.tooltip = "Take 6 Fire Damage to Mechs in one Mission.\n\nProgress: 0/7"
     end
-    if mission.MapTags and #mission.MapTags > 0 and mission.MapTags[1] ~= "final_island" and not achievements.ffrg_Ceaseless:isComplete() then
+    if mission.MapTags and #mission.MapTags > 0 and mission.MapTags[1] == "final_island" and not achievements.ffrg_Ceaseless:isComplete() then
         GAME.ffrg_RevivalCount = 0
         achievements.ffrg_Ceaseless.tooltip = "Revive Mechs from destruction 15 times in one Island.\n\nProgress: "..GAME.ffrg_RevivalCount.."/15"
     end
