@@ -851,7 +851,7 @@ ffrg_Brute_Cannonade = Skill:new{
 
 ffrg_Brute_Cannonade_A = ffrg_Brute_Cannonade:new{
     UpgradeDescription = "Increases uses per battle by 1.",
-    Uses = 2
+    Limited = 2
 }
 
 ffrg_Brute_Cannonade_B = ffrg_Brute_Cannonade:new{
@@ -869,7 +869,7 @@ ffrg_Brute_Cannonade_B = ffrg_Brute_Cannonade:new{
 }
 
 ffrg_Brute_Cannonade_AB = ffrg_Brute_Cannonade:new{
-    Uses = 2,
+    Limited = 2,
     Projectiles = 3,
     TipDamageCustom = "2x3",
     Delay = 0.5,

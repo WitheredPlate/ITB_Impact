@@ -805,7 +805,7 @@ local function QueuedDamageIconAdd(icon, dir, curr, array)
     if Board:IsValid(curr + DIR_VECTORS[DirSwitch(dir)]) then
         iconDir = DirSwitch(dir)
     else
-        iconDir = DirSwitch(DirReverse(dir))
+        iconDir = DirReverse(DirSwitch(dir))
     end
     local icon_space = curr + DIR_VECTORS[iconDir]
     local damage = SpaceDamage(icon_space,0)

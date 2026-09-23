@@ -609,6 +609,35 @@ return {
 		"What's the point of immortality if you don't take advantage of it?",
 		"A weapon of war, no matter how volatile, can be wielded.",
 		"#self_mech is sustaining stress damage. Res paulo excitantiores reddimus."
+	},
+
+
+-------------
+-- Arsenal --
+-------------
+
+	Mech_Push = {
+		"",
+		"",
+		"",
+		""
+	},
+	Mech_Shove = {
+		"",
+		""
+	},
+	Mech_Flip = {
+		"",
+		"",
+		""
+	},
+	Mech_Accelerate = {
+		"",
+		""
+	},
+	Mech_Overclock = {
+		"",
+		""
 	}
 }
 

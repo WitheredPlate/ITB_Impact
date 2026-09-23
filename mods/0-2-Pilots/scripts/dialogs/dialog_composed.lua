@@ -622,6 +622,35 @@ return {
 		"This armament is warping #self_mech's hull, though I have a handle on it.",
 		"I suppose one may need an absurdly high weaponry output to combat the beasts.",
 		"I'm reading significant stress warping due to armaments."
+	},
+
+
+-------------
+-- Arsenal --
+-------------
+
+	Mech_Push = {
+		"",
+		"",
+		"",
+		""
+	},
+	Mech_Shove = {
+		"",
+		""
+	},
+	Mech_Flip = {
+		"",
+		"",
+		""
+	},
+	Mech_Accelerate = {
+		"",
+		""
+	},
+	Mech_Overclock = {
+		"",
+		""
 	}
 }
 

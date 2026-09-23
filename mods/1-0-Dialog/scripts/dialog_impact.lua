@@ -167,7 +167,7 @@ return {
     Rust = {
         Mech_Heal = {
             "Hull integrity rising.",
-            "That'll let me take another hit",
+            "That'll let me take another hit.",
             "That should keep me in the fight."
         },
         Mech_Boost = {

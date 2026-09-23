@@ -456,6 +456,27 @@ return {
 	},
 	Mech_SelfDamage = {
 		"{{ #@<,@#&-- }}"
+	},
+
+
+-------------
+-- Arsenal --
+-------------
+
+	Mech_Push = {
+		""
+	},
+	Mech_Shove = {
+		""
+	},
+	Mech_Flip = {
+		""
+	},
+	Mech_Accelerate = {
+		""
+	},
+	Mech_Overclock = {
+		""
 	}
 }
 
