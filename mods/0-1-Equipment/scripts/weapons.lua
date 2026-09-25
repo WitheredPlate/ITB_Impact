@@ -4,6 +4,7 @@
 
 --== Prime ==--
 -- Gorgon Shredder
+-- Disintegrator
 -- Atlas Maul
 
 --== Ranged ==--
@@ -41,6 +42,7 @@ local imagePath = path .."img/"
 
 local files = {
     "weapons/ffrg_prime_shred.png",
+    "weapons/ffrg_prime_heavylaser.png",
     "weapons/ffrg_prime_maul.png",
     "weapons/ffrg_brute_cannonade.png",
     "weapons/ffrg_brute_flechette.png",
@@ -87,12 +89,30 @@ local files = {
     "effects/ffrg_explo_horus_L.png",
     "effects/ffrg_explo_horus_R.png",
     "effects/ffrg_explo_horus_D.png",
+    "effects/ffrg_lasermult1_start.png",
+    "effects/ffrg_lasermult1_hit.png",
+    "effects/ffrg_lasermult1_R.png",
+    "effects/ffrg_lasermult1_R1.png",
+    "effects/ffrg_lasermult1_R2.png",
+    "effects/ffrg_lasermult1_U.png",
+    "effects/ffrg_lasermult1_U1.png",
+    "effects/ffrg_lasermult1_U2.png"
 }
 
 for _, file in ipairs(files) do
     modApi:appendAsset("img/".. file, imagePath .. file)
 end
 
+local v = "ffrg_lasermult1"
+local vPoint = Point(-14,3)
+Location["effects/"..v.."_U.png"] = vPoint
+Location["effects/"..v.."_U1.png"] = vPoint
+Location["effects/"..v.."_U2.png"] = vPoint
+Location["effects/"..v.."_R.png"] = vPoint
+Location["effects/"..v.."_R1.png"] = vPoint
+Location["effects/"..v.."_R2.png"] = vPoint
+Location["effects/"..v.."_hit.png"] = vPoint
+Location["effects/"..v.."_start.png"] = vPoint
 
 --== Atlas Maul ==--
 ANIMS.ffrg_Explo_Hammer_0 = Animation:new{
@@ -446,6 +466,182 @@ function ffrg_Prime_Shred:GetSkillEffect(p1, p2)
     end
     return ret
 end
+
+
+-------------------
+-- Disintegrator --
+-------------------
+
+ffrg_Prime_HeavyLaser = Skill:new{
+    Name = "Disintegrator",
+    Icon = "weapons/ffrg_prime_heavylaser.png",
+    Description = "Fire multiple beams in sequence that lose damage over distance. Damage self.",
+    Class = "Prime",
+    Limited = 1,
+    SelfDamage = 2,
+    MinDamage2 = 1,
+    MaxDamage2 = 3,
+    TipDamageCustom = "1-3x2",
+    Attacks = 2,
+    Delay = 0.35,
+    LastSound = "mech/science/fourway_mech/death",
+    FireSound = "weapons/burst_beam",
+    LaserArt1 = "effects/ffrg_lasermult1",
+    LaserArt2 = "effects/ffrg_lasermult1",
+    FriendlyDamage = true,
+    Upgrades = 2,
+    UpgradeCost = {1,2},
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,3),
+        Enemy2 = Point(2,2),
+        Enemy3 = Point(2,1),
+        Target = Point(2,3),
+        Length = 5
+    }
+}
+
+ffrg_Prime_HeavyLaser_A = ffrg_Prime_HeavyLaser:new{
+    UpgradeDescription = "Allied Units and Buildings will no longer take damage from this attack.",
+    FriendlyDamage = false,
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,3),
+        Friendly = Point(2,2),
+        Enemy2 = Point(2,1),
+        Target = Point(2,3),
+        Length = 5
+    }
+}
+
+ffrg_Prime_HeavyLaser_B = ffrg_Prime_HeavyLaser:new{
+    UpgradeDescription = "Increases the number of fired lasers by 1",
+    Attacks = 3,
+    TipDamageCustom = "1-3x3",
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,3),
+        Enemy2 = Point(2,2),
+        Mountain = Point(2,1),
+        Enemy3 = Point(2,0),
+        Target = Point(2,3),
+        Length = 5.5
+    }
+}
+
+ffrg_Prime_HeavyLaser_AB = ffrg_Prime_HeavyLaser:new{
+    FriendlyDamage = false,
+    Attacks = 3,
+    TipDamageCustom = "1-3x3",
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,3),
+        Friendly = Point(2,2),
+        Mountain = Point(2,1),
+        Enemy2 = Point(2,0),
+        Target = Point(2,3),
+        Length = 5.5
+    }
+}
+
+Weapon_Texts.ffrg_Prime_HeavyLaser_Upgrade1 = "Friendly Immune"
+Weapon_Texts.ffrg_Prime_HeavyLaser_Upgrade2 = "+1 Attack"
+
+local function merge_lists(list1,list2)
+    for i, v in ipairs(list2) do
+        list1[i] = (list1[i] or 0) + v
+    end
+end
+
+function ffrg_Prime_HeavyLaser:GetTargetArea(point)
+	local ret = PointList()
+	for dir = DIR_START, DIR_END do
+		local curr = point + DIR_VECTORS[dir]
+		while Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and Board:IsValid(curr) do
+			ret:push_back(curr)
+			curr = curr + DIR_VECTORS[dir]
+		end
+		if Board:IsValid(curr) then
+			ret:push_back(curr)
+		end
+	end
+	return ret
+end
+
+function ffrg_Prime_HeavyLaser:AddLaser(ret, point, direction, pierce, icons)
+    local return_icons = {}
+    local origin = point-DIR_VECTORS[direction]
+    local dam = self.MaxDamage2
+    while Board:IsValid(point) do
+        table.insert(return_icons, 1)
+        local damage = SpaceDamage(point, dam)
+        if not self.FriendlyDamage and ( Board:IsBuilding(point) or Board:IsPawnTeam(point,TEAM_PLAYER) ) then
+            damage.iDamage = DAMAGE_ZERO
+        end
+        if icons then
+            local immunities = {}
+            if not self.FriendlyDamage then immunities = {team = TEAM_PLAYER, buildings = true} end
+            local multihit = ffrg_Multihit.MultihitMelee(dam,(icons[#return_icons] or 0)+1,point,{mode = "dissect", ret = ret, origin = origin, delay = self.Delay, immunities = immunities})
+            damage.sImageMark = multihit[1].sImageMark
+        end
+        local cont = true
+        if ( Board:IsBuilding(point) and self.FriendlyDamage) or Board:GetTerrain(point) == TERRAIN_MOUNTAIN then
+            if Board:IsFrozen(point) then pierce = pierce - 1 end
+            if Board:IsShield(point) then pierce = pierce - 1 end
+            if Board:GetTerrain(point) == TERRAIN_MOUNTAIN then
+                pierce = pierce - Board:GetHealth(point)
+            else
+                local temp_dam = dam
+                if Board:IsPawnSpace(origin) and Board:GetPawn(origin):IsBoosted() then temp_dam = temp_dam + 1 end
+                pierce = pierce - math.ceil(Board:GetHealth(point)/temp_dam)
+            end
+            if pierce < 0 then
+                cont = false
+            end
+        elseif Board:IsBuilding(point) and not self.FriendlyDamage then
+            cont = false
+        end
+        if not Board:IsValid(point + DIR_VECTORS[direction]) then
+            cont = false
+        end
+        if cont then
+            ret:AddDamage(damage)
+        else
+            local art = self.LaserArt1
+            if pierce%2 == 1 then
+                art = self.LaserArt2
+            end
+            ret:AddProjectile(origin,damage,art,NO_DELAY)
+            return return_icons
+        end
+        point = point + DIR_VECTORS[direction]
+        dam = dam - 1
+        if dam < self.MinDamage2 then dam = self.MinDamage2 end
+    end
+end
+
+function ffrg_Prime_HeavyLaser:GetSkillEffect(p1,p2)
+    local ret = SkillEffect()
+    local direction = GetDirection(p2-p1)
+    local icons = {}
+    local start = p1 + DIR_VECTORS[direction]
+    for i = 1, self.Attacks do
+        if i ~= self.Attacks then
+            ret:AddDamage(SoundEffect(Point(-1,-1),self.FireSound))
+            local return_icons = self:AddLaser(ret, start, direction, i-1)
+            merge_lists(icons,return_icons)
+            ret:AddDelay(self.Delay)
+        else
+            ret:AddDamage(SoundEffect(Point(-1,-1),self.FireSound))
+            ret:AddDamage(SoundEffect(Point(-1,-1),self.LastSound))
+            self:AddLaser(ret, start, direction, i-1, icons)
+        end
+    end
+    ret:AddDamage(SpaceDamage(p1,self.SelfDamage))
+
+    return ret
+end
+
 
 
 ----------------

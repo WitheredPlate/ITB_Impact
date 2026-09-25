@@ -157,11 +157,6 @@ local multihitFiles = {
     "multihit_4_void",
     "multihit_5_void",
     "multihit_6_void",
-    "multihit_2_immune",
-    "multihit_3_immune",
-    "multihit_4_immune",
-    "multihit_5_immune",
-    "multihit_6_immune",
     "multihit_2_armor",
     "multihit_3_armor",
     "multihit_4_armor",
@@ -227,6 +222,11 @@ for _, file in ipairs(multihitFiles) do
 end
 
 local multihitFilesNegate = {
+    "multihit_2_immune",
+    "multihit_3_immune",
+    "multihit_4_immune",
+    "multihit_5_immune",
+    "multihit_6_immune",
     "multihit_2_negate",
     "multihit_3_negate",
     "multihit_4_negate",
@@ -864,7 +864,6 @@ local function MultihitMelee(damage, attacks, point, config)
             config.damage = config.damage + 1
             boost = true
         end
-
         if config.immunities.buildings and Board:IsBuilding(point) then
             config.damage = DAMAGE_ZERO
         elseif config.immunities.team and Board:IsPawnTeam(point,config.immunities.team) then
@@ -894,7 +893,6 @@ local function MultihitMelee(damage, attacks, point, config)
                 if pawn:IsFrozen() or ( config.force_ice and Board:IsTipImage()) then
                     block = block + 1
                 end
-
                 if config.mode == "ko" and config.damage ~= 0 and config.damage ~= DAMAGE_ZERO then
                     local damage = config.damage
                     local attacks = config.attacks - block
@@ -946,6 +944,13 @@ local function MultihitMelee(damage, attacks, point, config)
                     ffrg_SeriousDamage.AppendSeriousDamage( config.ret, (( config.attacks - block - Board:GetHealth(point) ) * config.damage)+block, point, {queued = config.queued, type = "stupid", preview = true} )
                 end
             else
+                if config.damage == DAMAGE_ZERO then
+                    modifier = "_immune"
+                elseif config.damage == 0 then
+                    modifier = "_void"
+                elseif boost then
+                    modifier = "_boost"
+                end
                 if Board:IsShield(point) then
                     block = 1
                 end
