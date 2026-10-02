@@ -413,13 +413,13 @@ modApi:addPalette({
     ID = "ffrg_ArchitectsColors",
     Name = "Architects",
     PlateHighlight = {216, 253, 245},	--lights
-    PlateLight     = {86, 128, 250},	--main light
+    PlateLight     = {74, 121, 255},	--main light
     PlateMid       = {46, 49, 177},		--main mid
-    PlateDark      = {40, 32, 92},		--main dark
-    PlateOutline   = {15, 16, 22},		--main outline
-    PlateShadow    = {59, 41, 36},		--metal dark
-    BodyColor      = {127, 92, 63},	    --metal mid
-    BodyHighlight  = {211, 192, 112},	--metal light
+    PlateDark      = {39, 36, 59},		--main dark
+    PlateOutline   = {18, 19, 27},		--main outline
+    PlateShadow    = {59, 36, 36},		--metal dark
+    BodyColor      = {144, 88, 40},	    --metal mid
+    BodyHighlight  = {222, 198, 97},	--metal light
 })
 local architectsPalette = modApi:getPaletteImageOffset("ffrg_ArchitectsColors")
 
@@ -430,12 +430,12 @@ modApi:addPalette({
     ID = "ffrg_SeismicColors",
     Name = "Seismic Colossi",
     PlateHighlight = {129, 255, 184},	--lights
-    PlateLight     = {107, 114, 115},	--main light
-    PlateMid       = {61, 64, 69},		--main mid
-    PlateDark      = {35, 36, 40},		--main dark
-    PlateOutline   = {15, 15, 22},		--main outline
-    PlateShadow    = {50, 26, 27},		--metal dark
-    BodyColor      = {102, 70, 69},	    --metal mid
+    PlateLight     = {118, 126, 127},	--main light
+    PlateMid       = {61, 65, 72},		--main mid
+    PlateDark      = {28, 29, 32},		--main dark
+    PlateOutline   = {11, 11, 16},		--main outline
+    PlateShadow    = {45, 30, 31},		--metal dark
+    BodyColor      = {111, 64, 62},	    --metal mid
     BodyHighlight  = {167, 141, 137},	--metal light
 })
 local seismicPalette = modApi:getPaletteImageOffset("ffrg_SeismicColors")
@@ -449,13 +449,13 @@ modApi:addPalette({
     ID = "ffrg_FrenzyColors",
     Name = "Frenzy",
     PlateHighlight = {252, 208, 251},	--lights
-    PlateLight     = {254, 43, 83},	    --main light
+    PlateLight     = {255, 65, 101},	    --main light
     PlateMid       = {131, 27, 31},		--main mid
-    PlateDark      = {65, 12, 23},		--main dark
-    PlateOutline   = {35, 6, 15},		--main outline
+    PlateDark      = {55, 22, 29},		--main dark
+    PlateOutline   = {23, 12, 15},		--main outline
     PlateShadow    = {31, 39, 51},		--metal dark
-    BodyColor      = {60, 86, 89},	    --metal mid
-    BodyHighlight  = {125, 159, 146},	--metal light
+    BodyColor      = {51, 89, 93},	    --metal mid
+    BodyHighlight  = {136, 170, 157},	--metal light
 })
 local frenzyPalette = modApi:getPaletteImageOffset("ffrg_FrenzyColors")
 

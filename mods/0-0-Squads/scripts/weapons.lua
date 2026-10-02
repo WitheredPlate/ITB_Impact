@@ -1821,56 +1821,20 @@ ffrg_Passive_Phoenix = PassiveSkill:new{
     Icon = "weapons/ffrg_passive_phoenix.png",
     Passive = "Passive_Medical_Phoenix",
     TipImage = {
-        Unit = Point(2,3),
+        CustomPawn = "ScienceMech",
+        Unit_Damaged = Point(2,2),
         Friendly = Point(2,1),
-        Friendly2 = Point(3,2),
-        Friendly3 = Point(1,2),
         Target = Point(2,2),
-        Length = 7
+        Length = 5
     }
 }
 
 function ffrg_Passive_Phoenix:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
-    local damage1 = SpaceDamage(Point(2,3),DAMAGE_DEATH)
-    local damage2 = SpaceDamage(Point(2,1),DAMAGE_DEATH)
-    local damage3 = SpaceDamage(Point(3,2),DAMAGE_DEATH)
-    local damage4 = SpaceDamage(Point(1,2),DAMAGE_DEATH)
-    damage1.bHide = true
-    damage2.bHide = true
-    damage3.bHide = true
-    damage4.bHide = true
-    local damage5 = SpaceDamage(Point(2,3),-1)
-    local damage6 = SpaceDamage(Point(2,1),-1)
-    local damage7 = SpaceDamage(Point(3,2),-1)
-    local damage8 = SpaceDamage(Point(1,2),-1)
-    damage5.bHide = true
-    damage6.bHide = true
-    damage7.bHide = true
-    damage8.bHide = true
-    ret:AddDamage(damage1)
-    ret:AddDamage(damage2)
-    ret:AddDamage(damage3)
-    ret:AddDamage(damage4)
-    ret:AddDelay(0.75)
-    pawn1 = Board:GetPawn(Point(2,3))
-    pawn2 = Board:GetPawn(Point(2,1))
-    pawn3 = Board:GetPawn(Point(3,2))
-    ret:AddDamage(damage5)
-    ffrg_Supply.Supply(Point(2,3),Point(2,3),ret,{hideIcon = true})
-    ret:AddScript("ffrg_Passive_Phoenix:Boost(Point(2,3))")
-    ret:AddDelay(0.5)
-    ret:AddDamage(damage6)
-    ffrg_Supply.Supply(Point(2,3),Point(2,1),ret,{hideIcon = true})
-    ret:AddScript("ffrg_Passive_Phoenix:Boost(Point(2,1))")
-    ret:AddDelay(0.5)
-    ret:AddDamage(damage7)
-    ffrg_Supply.Supply(Point(2,3),Point(3,2),ret,{hideIcon = true})
-    ret:AddScript("ffrg_Passive_Phoenix:Boost(Point(3,2))")
-    ret:AddDelay(0.5)
-    ret:AddDamage(damage8)
-    ffrg_Supply.Supply(Point(2,3),Point(1,2),ret,{hideIcon = true})
-    ret:AddScript("ffrg_Passive_Phoenix:Boost(Point(1,2))")
+    local damage = SpaceDamage(Point(2,2),-1)
+    ffrg_Supply.Supply(Point(2,2),Point(2,2),ret,{hideIcon = true})
+    ret:AddDamage(damage)
+    ret:AddScript("ffrg_Passive_Phoenix:Boost(Point(2,2))")
 	return ret
 end
 

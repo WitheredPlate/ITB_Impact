@@ -6,7 +6,7 @@ local VE_Info = {
 	Mech_Boost = { Odds = 20 },
 	Mech_Deplete = { Odds = 10 },
 	Mech_Supply = { Odds = 30 },
-	Mech_SelfDamage = { Odds = 5 }
+	Mech_SelfDamage = { Odds = 10 }
 }
 
 for personality_id, dialog in pairs(dialog_impact) do
@@ -23,7 +23,8 @@ local function ffrg_TunnelVoiceEvent(event, custom_odds)
 	if custom_odds then
 		odds = custom_odds
 	end
-	if odds >= random_int(100) and ( not Game:IsVoicePopup() or odds == 100 ) and not Board:IsTipImage() and GetCurrentMission() ~= Mission_Test then
+	local random = random_int(100)
+	if odds >= random and ( not Game:IsVoicePopup() or odds == 100 ) and not Board:IsTipImage() then
 		TriggerVoiceEvent(event)
 	end
 end
@@ -229,7 +230,7 @@ if ffrg_impact_dialog_setting == "full" then
 			local id = pawn:GetId()
 			if self_damaging and self_damaging == id then
 				local event = VoiceEvent("Mech_SelfDamage",id,id)
-				TriggerVoiceEvent(event)
+				ffrg_TunnelVoiceEvent(event)
 			end
 		end
 	end
