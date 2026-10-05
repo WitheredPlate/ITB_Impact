@@ -413,13 +413,13 @@ modApi:addPalette({
     ID = "ffrg_ArchitectsColors",
     Name = "Architects",
     PlateHighlight = {216, 253, 245},	--lights
-    PlateLight     = {74, 121, 255},	--main light
-    PlateMid       = {46, 49, 177},		--main mid
+    PlateLight     = {27, 132, 255},	--main light
+    PlateMid       = {50, 53, 189},		--main mid
     PlateDark      = {39, 36, 59},		--main dark
     PlateOutline   = {18, 19, 27},		--main outline
     PlateShadow    = {59, 36, 36},		--metal dark
     BodyColor      = {144, 88, 40},	    --metal mid
-    BodyHighlight  = {222, 198, 97},	--metal light
+    BodyHighlight  = {218, 199, 117},	--metal light
 })
 local architectsPalette = modApi:getPaletteImageOffset("ffrg_ArchitectsColors")
 

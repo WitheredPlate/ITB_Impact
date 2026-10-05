@@ -256,6 +256,7 @@ AddPawnName("ffrg_Bomberbug2")
 ffrg_BomberbugBoss = ffrg_Bomberbug1:new{
     Name = "Bomberbug Leader",
     Health = 6,
+    Massive = true,
     ImageOffset = 2,
     SkillList = { "ffrg_BomberbugAtkB" },
     Ranged = 1,
@@ -306,6 +307,7 @@ AddPawnName("ffrg_Caterpillar2")
 ffrg_CaterpillarBoss = ffrg_Caterpillar1:new{
     Name = "Caterpillar Leader",
     Health = 5,
+    Massive = true,
     ImageOffset = 2,
     SkillList = { "ffrg_CaterpillarAtkB" },
     Portrait = "enemy/ffrg_CaterpillarB",

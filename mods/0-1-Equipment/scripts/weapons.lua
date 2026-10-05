@@ -344,6 +344,7 @@ ffrg_Prime_Shred = Skill:new{
     Icon = "weapons/ffrg_prime_shred.png",
     Description = "Damage an adjacent tile several times.",
     Class = "Prime",
+    PowerCost = 1,
     PathSize = 1,
     Damage2 = 1,
     TipDamageCustom = "1x4",
