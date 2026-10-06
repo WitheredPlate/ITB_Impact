@@ -87,7 +87,7 @@ ANIMS.ffrg_bomberbugd = ANIMS.EnemyUnit:new{
     Time = 0.14,
     Loop = false,
 }
-ANIMS.ffrg_bomberbugw = ANIMS.EnemyUnit:new{
+ANIMS.ffrg_bomberbugw = ANIMS.BaseUnit:new{
     Image = "units/aliens/ffrg_bomberbug_Bw.png",
     PosX = -16,
     PosY = 8
@@ -118,7 +118,7 @@ ANIMS.ffrg_caterpillard = ANIMS.EnemyUnit:new{
     PosX = -20,
     PosY = 2
 }
-ANIMS.ffrg_caterpillarw = ANIMS.EnemyUnit:new{
+ANIMS.ffrg_caterpillarw = ANIMS.BaseUnit:new{
     Image = "units/aliens/ffrg_caterpillar_Bw.png",
     PosX = -20,
     PosY = 13

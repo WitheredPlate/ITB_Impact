@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.0.5"
+local VERSION = "1.0.6"
 
 --## A library of functions to control the vanilla data the game uses to control how, when, and how many different enemies appear.
 --## Mostly dedicated towards controlling exclusions, which prevent enemies and other elements from appearing with other enemies and elements.
@@ -416,33 +416,6 @@ end
 
 
 --////////////////////////////////--
---//        Burrower Fix        //--
---////////////////////////////////--
-
-
---## Making the vanilla burrower exclusion into a basic exclusion with 1 element but an exclusion tail with 2 elements, rather than a basic exclusion with 3 elements.
---## Fixes a bug that prevented Blast Psions from appearing on A.C.I.D. Emergence missions and prevents said bug from expanding to any added modded units.
-
-local temp_burrowers = {}
-
-for _, element in ipairs(exclusiveElements[4]) do
-    if element ~= "Jelly_Explode" and element ~= "Mission_Acid" then
-        table.insert(temp_burrowers, element)
-    end
-end
-
-exclusiveElements[4] = temp_burrowers
-
-ffrg_ExclusionTail("burrowers", {"Jelly_Explode", "Mission_Acid"}, false)
-
-
---////////////////////////////////--
-
-
-
-
-
---////////////////////////////////--
 --//      Boom Bot Control      //--
 --////////////////////////////////--
 
@@ -580,6 +553,21 @@ local function initialize()
     ffrg_SpawnController.ListExclusions = ffrg_ListExclusions
 
     ffrg_SpawnController.Version = VERSION
+
+    --## Making the vanilla burrower exclusion into a basic exclusion with 1 element but an exclusion tail with 2 elements, rather than a basic exclusion with 3 elements.
+    --## Fixes a bug that prevented Blast Psions from appearing on A.C.I.D. Emergence missions and prevents said bug from expanding to any added modded units.
+
+    local temp_burrowers = {}
+
+    for _, element in ipairs(exclusiveElements[4]) do
+        if element ~= "Jelly_Explode" and element ~= "Mission_Acid" then
+            table.insert(temp_burrowers, element)
+        end
+    end
+
+    exclusiveElements[4] = temp_burrowers
+
+    ffrg_ExclusionTail("burrowers", {"Jelly_Explode", "Mission_Acid"}, false)
 end
 
 if ffrg_SpawnController then
