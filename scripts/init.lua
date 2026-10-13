@@ -1,4 +1,4 @@
-ffrg_impact_version = "1.0.7"
+ffrg_impact_version = "1.1.0"
 
 local mod = {
     id = "ffrg_impact",
@@ -21,8 +21,7 @@ local libs = {
     "weaponPreview",
     "worldConstants",
     "seriousDamage/seriousDamage",
-    "customAnim",
-    "customProjectile",
+    "customProjectile/customProjectile",
     --"customClass",
     "spawnController",
     "artilleryArc",

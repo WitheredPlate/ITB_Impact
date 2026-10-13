@@ -53,6 +53,12 @@ local files = {
     "weapons/ffrg_passive_icesupply.png",
     "weapons/ffrg_support_supply.png",
     "weapons/ffrg_support_mountedarmaments.png",
+    "weapons/ffrg_support_deploycannonturret.png",
+    "weapons/ffrg_support_deploymortarturret.png",
+    "weapons/ffrg_support_deployflamerturret.png",
+    "weapons/ffrg_deploy_multishot.png",
+    "weapons/ffrg_deploy_lightmortar.png",
+    "weapons/ffrg_deploy_lightflamer.png",
     "effects/ffrg_saw_shatter.png",
     "effects/ffrg_shot_sawfrag.png",
     "effects/ffrg_explo_hammer_U.png",
@@ -96,7 +102,8 @@ local files = {
     "effects/ffrg_lasermult1_R2.png",
     "effects/ffrg_lasermult1_U.png",
     "effects/ffrg_lasermult1_U1.png",
-    "effects/ffrg_lasermult1_U2.png"
+    "effects/ffrg_lasermult1_U2.png",
+    "effects/ffrg_shotup_lightmortar.png"
 }
 
 for _, file in ipairs(files) do
@@ -322,6 +329,15 @@ ANIMS.explohorus_3 = Animation:new{
     Time = 0.04,
     PosX = -74,
     PosY = -56
+}
+
+--== Mortar Turret ==--
+ANIMS.ffrg_Shotup_LightMortar = Animation:new{
+    Image = "effects/ffrg_shotup_lightmortar.png",
+    NumFrames = 12,
+    Time = 0.02,
+    PosX = -6,
+    PosY = 6
 }
 
 --////////////////////////////////--
@@ -1864,5 +1880,424 @@ end
 
 modapiext.events.onPawnIsFrozen:subscribe(ffrg_onPawnIsFrozen)
 modapiext.events.onSkillStart:subscribe(ffrg_onSkillBuild)
+
+
+-------------
+-- Turrets --
+-------------
+
+ffrg_Support_DeployCannonTurret = Skill:new{
+    Name = "Cannon Turret",
+    Description = "Deploy a Cannon Turret. It can fire a barrage of damaging projectiles.",
+    Class = "",
+    Icon = "weapons/ffrg_support_deploycannonturret.png",
+    Deployed = "ffrg_CannonTurret",
+    Anim = "ffrg_turret_cannone",
+    WhirrSound = "mech/prime/bottlecap_mech/death",
+    TwoClick = false,
+    Limited = 1,
+    Upgrades = 2,
+    UpgradeCost = {2,3},
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(2,2),
+    }
+}
+
+ffrg_Support_DeployCannonTurret_A = ffrg_Support_DeployCannonTurret:new{
+    UpgradeDescription = "Increases the number of projectiles fired by the Cannon Turret by 1.",
+    Deployed = "ffrg_CannonTurretA"
+}
+
+ffrg_Support_DeployCannonTurret_B = ffrg_Support_DeployCannonTurret:new{
+    UpgradeDescription = "Deploy an additional Cannon Turret on a different tile.",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(2,2),
+    }
+}
+
+ffrg_Support_DeployCannonTurret_AB = ffrg_Support_DeployCannonTurret:new{
+    Deployed = "ffrg_CannonTurretA",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(2,2),
+    }
+}
+
+Weapon_Texts.ffrg_Support_DeployCannonTurret_Upgrade1 = "+1 Projectile"
+Weapon_Texts.ffrg_Support_DeployCannonTurret_Upgrade2 = "+1 Turret"
+
+function ffrg_Support_DeployCannonTurret:GetTargetArea(point)
+    local ret = PointList()
+    for i = 0, 3 do
+        curr = point+DIR_VECTORS[i]
+        if Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
+            ret:push_back(curr)
+        end
+    end
+    return ret
+end
+
+function ffrg_Support_DeployCannonTurret:GetSkillEffect(p1,p2)
+    local ret = SkillEffect()
+    local anim = SpaceDamage(p2,0)
+    local damage = SpaceDamage(p2,0)
+    damage.sPawn = self.Deployed
+    anim.sAnimation = self.Anim
+    anim.sSound = self.WhirrSound
+    ret:AddDamage(anim)
+    ret:AddDelay(1.12)
+    ret:AddDamage(damage)
+    return ret
+end
+
+function ffrg_Support_DeployCannonTurret:IsTwoClickException(p1,p2)
+    local counter = 0
+    for i = 0, 3 do
+        curr = p1+DIR_VECTORS[i]
+        if Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
+            counter = counter + 1
+        end
+    end
+    if counter > 1 then return false end
+	return true
+end
+
+function ffrg_Support_DeployCannonTurret:GetSecondTargetArea(p1,p2)
+    local ret = PointList()
+    for i = 0, 3 do
+        curr = p1+DIR_VECTORS[i]
+        if curr ~= p2 and Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
+            ret:push_back(curr)
+        end
+    end
+    return ret
+end
+
+function ffrg_Support_DeployCannonTurret:GetFinalEffect(p1,p2,p3)
+    local ret = SkillEffect()
+    local damage = SpaceDamage(p2,0)
+    local anim = SpaceDamage(p2,0)
+    damage.sPawn = self.Deployed
+    anim.sSound = self.WhirrSound
+    anim.sAnimation = self.Anim
+    local damage2 = SpaceDamage(p3,0)
+    local anim2 = SpaceDamage(p3,0)
+    damage2.sPawn = self.Deployed
+    anim2.sSound = self.WhirrSound
+    anim2.sAnimation = self.Anim
+    ret:AddDamage(anim)
+    ret:AddDelay(0.4)
+    ret:AddDamage(anim2)
+    ret:AddDelay(0.72)
+    ret:AddDamage(damage)
+    ret:AddDelay(0.4)
+    ret:AddDamage(damage2)
+    return ret
+end
+
+
+ffrg_Support_DeployMortarTurret = ffrg_Support_DeployCannonTurret:new{
+    Name = "Cannon Mortar",
+    Description = "Deploy a Mortar Turret. It can fire damaging and pushing artilleries.",
+    Icon = "weapons/ffrg_support_deploymortarturret.png",
+    Deployed = "ffrg_MortarTurret",
+    Anim = "ffrg_turret_mortare",
+    UpgradeCost = {3,3},
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(3,2),
+        Length = 5
+    }
+}
+
+ffrg_Support_DeployMortarTurret_A = ffrg_Support_DeployMortarTurret:new{
+    UpgradeDescription = "Increases the dealt by the Mortar Turret by 1.",
+    Deployed = "ffrg_MortarTurretA"
+}
+
+ffrg_Support_DeployMortarTurret_B = ffrg_Support_DeployMortarTurret:new{
+    UpgradeDescription = "Deploy an additional Mortar Turret on a different tile.",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(3,2),
+        Length = 5
+    }
+}
+
+ffrg_Support_DeployMortarTurret_AB = ffrg_Support_DeployMortarTurret:new{
+    Deployed = "ffrg_MortarTurretA",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(3,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(2,2),
+        Length = 5
+    }
+}
+
+Weapon_Texts.ffrg_Support_DeployMortarTurret_Upgrade1 = "+1 Damage"
+Weapon_Texts.ffrg_Support_DeployMortarTurret_Upgrade2 = "+1 Turret"
+
+
+ffrg_Support_DeployFlamerTurret = ffrg_Support_DeployCannonTurret:new{
+    Name = "Flamer Turret",
+    Description = "Deploy a Flamer Turret. It can push and ignite multiple tiles.",
+    Icon = "weapons/ffrg_support_deployflamerturret.png",
+    Deployed = "ffrg_FlamerTurret",
+    Anim = "ffrg_turret_flamere",
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(2,2),
+        Enemy2 = Point(3,2),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(3,2),
+    }
+}
+
+ffrg_Support_DeployFlamerTurret_A = ffrg_Support_DeployFlamerTurret:new{
+    UpgradeDescription = "Increases the range of the Flamer Turret by 1.",
+    Deployed = "ffrg_FlamerTurretA",
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(2,2),
+        Enemy2 = Point(4,2),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(4,2),
+    }
+}
+
+ffrg_Support_DeployFlamerTurret_B = ffrg_Support_DeployFlamerTurret:new{
+    UpgradeDescription = "Deploy an additional Flamer Turret on a different tile.",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(2,2),
+        Enemy2 = Point(3,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(3,2),
+    }
+}
+
+ffrg_Support_DeployFlamerTurret_AB = ffrg_Support_DeployFlamerTurret:new{
+    Deployed = "ffrg_FlamerTurretA",
+    TwoClick = true,
+    TipImage = {
+        Unit = Point(1,3),
+        Target = Point(1,2),
+        Enemy = Point(2,2),
+        Enemy2 = Point(4,2),
+        Second_Click = Point(2,3),
+        Second_Origin = Point(1,2),
+        Second_Target = Point(4,2),
+    }
+}
+
+Weapon_Texts.ffrg_Support_DeployFlamerTurret_Upgrade1 = "+1 Range"
+Weapon_Texts.ffrg_Support_DeployFlamerTurret_Upgrade2 = "+1 Turret"
+
+
+---------------------
+-- Cerberus Cannon --
+---------------------
+
+ffrg_Deploy_Multishot = Skill:new{
+    Name = "Cerberus Cannon",
+    Description = "Fire multiple damaging projectiles in sequence.",
+    Class = "Unique",
+    PathSize = INT_MAX,
+    Icon = "weapons/ffrg_deploy_multishot.png",
+    ProjectileArt = "effects/ffrg_shot_bullet",
+    FireSound = "/weapons/modified_cannons",
+    HitSound = "/impact/generic/explosion",
+    Animation = "explopush1_",
+    Projectiles = 2,
+    Damage2 = 1,
+    TipDamageCustom = "1x2",
+    Delay = 0.25,
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,2),
+        Enemy2 = Point(2,1),
+        Target = Point(2,2),
+        CustomEnemy = "Leaper1",
+        CustomPawn = "ffrg_CannonTurret",
+        Length = 5
+    }
+}
+
+ffrg_Deploy_Multishot_A = ffrg_Deploy_Multishot:new{
+    Projectiles = 3,
+    TipDamageCustom = "1x3",
+    Delay = 0.20,
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,2),
+        Enemy2 = Point(2,1),
+        Target = Point(2,2),
+        CustomEnemy = "Digger1",
+        CustomPawn = "ffrg_CannonTurretA",
+        Length = 5
+    }
+}
+
+function ffrg_Deploy_Multishot:GetSkillEffect(p1, p2)
+    local ret = SkillEffect()
+    local dir = GetDirection(p2 - p1)
+    if not Board:IsBlocked(p1+DIR_VECTORS[dir],PATH_FLYER) then
+        ret:AddScript("if Board then Board:AddAnimation("..(p1+DIR_VECTORS[dir]):GetString()..",\"airpush_"..dir.."\",1) end")
+    end
+    ffrg_Multihit.MultihitProjectile(self.Damage2, self.Projectiles, p1, dir, {ret = ret, origin = p1, push = false, mode = "simple", delay = self.Delay, sfx_fire = self.FireSound, sfx_hit = self.HitSound, proj_art = self.ProjectileArt, anim = self.Animation, anim_directional = "forwards"})
+    return ret
+end
+
+
+--------------------
+-- Pegasus Mortar --
+--------------------
+
+ffrg_Deploy_LightMortar = LineArtillery:new{
+    Name = "Pegasus Mortar",
+    Description = "Fire a damaging and pushing artillery.",
+    Class = "Unique",
+    PathSize = INT_MAX,
+    Icon = "weapons/ffrg_deploy_lightmortar.png",
+    Explosion = "",
+    ArtilleryAnimation = "ffrg_Shotup_LightMortar",
+    LaunchSound = "/weapons/defense_strike",
+    ImpactSound = "/impact/generic/explosion_large",
+    Animation = "explopush2_",
+    Damage = 1,
+    TipImage = {
+        Unit = Point(2,4),
+        Mountain = Point(2,2),
+        Enemy = Point(2,1),
+        Target = Point(2,1),
+        CustomPawn = "ffrg_MortarTurret",
+        Length = 5
+    }
+}
+
+ffrg_Deploy_LightMortar_A = ffrg_Deploy_LightMortar:new{
+    Damage = 2,
+    TipImage = {
+        Unit = Point(2,4),
+        Mountain = Point(2,2),
+        Enemy = Point(2,1),
+        Target = Point(2,1),
+        CustomPawn = "ffrg_MortarTurretA",
+        Length = 5
+    }
+}
+
+function ffrg_Deploy_LightMortar:GetSkillEffect(p1, p2)
+    local ret = SkillEffect()
+    local dir = GetDirection(p2 - p1)
+    ret:AddScript("if Board then Board:AddAnimation("..p1:GetString()..",\"ExploArt1\",1) end")
+    ret:AddDelay(0.05)
+    ret:AddBounce(p1, 1)
+    local damage = SpaceDamage(p2, self.Damage, dir)
+    damage.sAnimation = self.Animation..dir
+    ffrg_CustomProjectile.AddCustomArtillery(p1,p2,self.ArtilleryAnimation,{ret = ret, damage = damage, directional = false})
+    ret:AddDelay(0.75)
+    ret:AddBounce(p2, 2)
+    return ret
+end
+
+
+--------------------
+-- Cyclops Flamer --
+--------------------
+
+ffrg_Deploy_LightFlamer = Skill:new{
+    Name = "Cyclops Flamer",
+    Description = "Ignite one or more tiles, push the furthest tile.",
+    Class = "Unique",
+    Icon = "weapons/ffrg_deploy_lightflamer.png",
+    LaunchSound = "/weapons/flamethrower",
+    Range = 2,
+    TipImage = {
+        Unit = Point(2,3),
+        Enemy = Point(2,2),
+        Enemy2 = Point(2,1),
+        Target = Point(2,1),
+        CustomPawn = "ffrg_FlamerTurret"
+    }
+}
+
+ffrg_Deploy_LightFlamer_A = ffrg_Deploy_LightFlamer:new{
+    Range = 3,
+    TipImage = {
+        Unit = Point(2,4),
+        Enemy = Point(2,3),
+        Enemy2 = Point(2,1),
+        Target = Point(2,1),
+        CustomPawn = "ffrg_FlamerTurretA"
+    }
+}
+
+function ffrg_Deploy_LightFlamer:GetTargetArea(point)
+	local ret = PointList()
+	for i = DIR_START, DIR_END do
+		for k = 1, self.Range do
+			local curr = DIR_VECTORS[i]*k + point
+			ret:push_back(curr)
+			if not Board:IsValid(curr) then
+				break
+			end
+		end
+	end
+
+	return ret
+end
+
+function ffrg_Deploy_LightFlamer:GetSkillEffect(p1, p2)
+	local ret = SkillEffect()
+	local direction = GetDirection(p2 - p1)
+	local distance = p1:Manhattan(p2)
+
+	for i = 1, distance do
+		local curr = p1 + DIR_VECTORS[direction]*i
+		local damage = SpaceDamage(p1 + DIR_VECTORS[direction]*i,0)
+		damage.iFire = EFFECT_CREATE
+		if i == distance then
+			damage.sAnimation = "flamethrower"..distance.."_"..direction
+			damage.iPush = direction
+		end
+		ret:AddDamage(damage)
+	end
+
+	return ret
+end
+
 
 --////////////////////////////////--

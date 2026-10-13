@@ -49,8 +49,6 @@ local files = {
     "weapons/ffrg_science_telefrag.png",
     "weapons/ffrg_science_TC_upheaval.png",
     "weapons/ffrg_passive_phoenix.png",
-    "effects/ffrg_shot_bullet_U.png",
-    "effects/ffrg_shot_bullet_R.png",
     "effects/ffrg_shotup_bastion.png",
     "effects/ffrg_shotup_maintenance.png",
     "effects/ffrg_chain1_U.png",
@@ -367,7 +365,7 @@ function ffrg_Prime_BoulderFlail:GetSkillEffect(p1, p2)
                 damage.iDamage = 0
                 ret:AddBurst(point,"Emitter_Burst_$tile",DIR_NONE)
             else
-                damage.sAnimation = "rock1d"
+                damage.sAnimation = "ffrg_RockShatter"
                 damage.iPush = DIR_FLIP
             end
             damage.sSound = self.Sound

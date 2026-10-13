@@ -337,9 +337,9 @@ function Ranged_Rockthrow:GetSkillEffect(p1,p2)
 	else
         blocked = true
         if self.Slab then
-            damage.sAnimation = "ffrg_barrier1d"
+            damage.sAnimation = "ffrg_SlabShatter"
         else
-            damage.sAnimation = "rock1d"
+            damage.sAnimation = "ffrg_RockShatter"
         end
 	end
 

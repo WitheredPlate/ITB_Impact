@@ -11,11 +11,15 @@ local files = {
     "effects/ffrg_swipe_alt.png",
     "effects/ffrg_saw_main.png",
     "effects/ffrg_saw_alt.png",
+    "effects/ffrg_shot_bullet_U.png",
+    "effects/ffrg_shot_bullet_R.png",
     "effects/smoke/ffrg_spark_small.png",
     "effects/smoke/ffrg_spark_large.png",
     "combat/icons/ffrg_icon_burrow_miss.png",
     "combat/icons/ffrg_icon_burrow_central_miss.png",
-    "effects/ffrg_nil.png"
+    "effects/ffrg_nil.png",
+    "effects/ffrg_rock_shatter.png",
+    "effects/ffrg_barrier_shatter.png"
 }
 
 for _, file in ipairs(files) do
@@ -25,6 +29,22 @@ end
 Location["combat/icons/ffrg_icon_burrow_miss.png"] = Point(-12,23)
 Location["combat/icons/ffrg_icon_burrow_central_miss.png"] = Point(-12,8)
 
+ANIMS.ffrg_RockShatter = ANIMS.BaseUnit:new{
+    Image = "effects/ffrg_rock_shatter.png",
+    PosX = -34,
+    PosY = -9,
+    NumFrames = 17,
+    Time = 0.07,
+    Loop = false
+}
+ANIMS.ffrg_SlabShatter = ANIMS.BaseUnit:new{
+    Image = "effects/ffrg_barrier_shatter.png",
+    PosX = -36,
+    PosY = -30,
+    NumFrames = 17,
+    Time = 0.07,
+    Loop = false
+}
 ANIMS.ffrg_Swipe1 = Animation:new{
     Image = "effects/ffrg_swipe_main.png",
     NumFrames = 6,

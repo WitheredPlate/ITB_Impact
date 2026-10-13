@@ -12,17 +12,17 @@ function mod:init()
 	require(self.scriptPath .."achievements")
 	require(self.scriptPath .."weapons")
 	require(self.scriptPath .."pawns")
-	modApi:addWeaponDrop("ffrg_Prime_BoulderFlail")
-	modApi:addWeaponDrop("ffrg_Prime_TC_MultiToss")
-	modApi:addWeaponDrop("ffrg_Brute_Rotary")
-	modApi:addWeaponDrop("ffrg_Brute_SawCharge")
-	modApi:addWeaponDrop("ffrg_Ranged_DeployBastion")
-	modApi:addWeaponDrop("ffrg_Ranged_TC_Maintenance")
-	modApi:addWeaponDrop("ffrg_Science_KO_Shred")
-	modApi:addWeaponDrop("ffrg_Science_TC_LongTele")
-	modApi:addWeaponDrop("ffrg_Science_KO_Telefrag")
-	modApi:addWeaponDrop("ffrg_Science_TC_Upheaval")
-	modApi:addWeaponDrop("ffrg_Passive_Phoenix")
+	modApi:addWeaponDrop{id = "ffrg_Prime_BoulderFlail", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Prime_TC_MultiToss", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Brute_Rotary", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Brute_SawCharge", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Ranged_DeployBastion", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Ranged_TC_Maintenance", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Science_KO_Shred", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Science_TC_LongTele", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Science_KO_Telefrag", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Science_TC_Upheaval", pod = false, shop = "advanced"}
+	modApi:addWeaponDrop{id = "ffrg_Passive_Phoenix", pod = false, shop = "advanced"}
 end
 
 function mod:load(options, version)
