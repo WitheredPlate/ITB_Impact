@@ -629,28 +629,20 @@ return {
 -- Arsenal --
 -------------
 
-	Mech_Push = {
-		"",
-		"",
-		"",
-		""
-	},
-	Mech_Shove = {
-		"",
-		""
-	},
-	Mech_Flip = {
-		"",
-		"",
-		""
+	Vek_Flip = {
+		"The Vek's been uprooted.",
+		"The beast's been confused.",
+		"Disrupted by blunt force. A fitting treatment for a crude beast."
 	},
 	Mech_Accelerate = {
-		"",
-		""
+		"My drive frame is nearing load capacity, but I have confidence I'll be able to keep it within range.",
+		"My fuel injectors are running above maximum capacity. Really causes me to question the sanity of the design.",
+		"My engine output is growing to abnormal levels."
 	},
 	Mech_Overclock = {
-		"",
-		""
+		"My spotter algorithm's taking too much initiative. I'll have to see about getting it tuned.",
+		"I appreciate what the augur processors can do for me, but I don't like the implications they present.",
+		"My cycling and ejection components are running at load."
 	}
 }
 

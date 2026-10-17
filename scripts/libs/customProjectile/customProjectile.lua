@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.1.0"
+local VERSION = "1.2.0"
 
 --## Template
 
@@ -53,12 +53,15 @@ local VERSION = "1.1.0"
 -- ret [SkillEffect] indicates the SkillEffect to add the projectile to. If not specified, the projectile is instead instantly added to the Board.
 -- damage [SpaceDamage] indicates the SpaceDamage the custom projectile should deal on impact.
 -- path [Boolean] indicates whether or not a path should be previewed on the board for the projectile. The default value is false if damage is not specified and true otherwise.
+-- duration [float] indicates how long the artillery should take to reach the target. Longer durations mean that with the same path, the artillery will move slower.
 -- height_map [Function] indicates the function that should be used to add height above 0 to the artillery based on its progress to the target. When not specified, defaults to the standard artillery arc.
 -- trail [String] indicates what emitter trail, of the hardcoded vanilla options, should be used for the artillery. Will not function if the height map is specified as anything other than the default.
     -- "missile" creates a trail of white smoke particles that fade mid-air
     -- "fireball" creates a trail of black smoke particles that fade mid-air. A vanilla bug causes the ground shadow of artilleries with this trail to be slightly misaligned.
     -- "shotup_acid" creates a trail of green cloud particles that fall towards the ground
 -- directional [Boolean] indicates whether the animation should be considered as directional and have a "_#" appended that indicates the direction. The default value is true.
+-- shadow [Boolean] indicates whether the artillery should have a standard shadow.
+-- custom_shadow [String] indicates an animation for a custom shadow that should be displayed below the artillery.
 
 
 --////////////////////////////////--
@@ -93,7 +96,12 @@ modApi:appendAsset("img/effects/ffrg_nil_fireball.png", path.."img/effects/ffrg_
 
 local function ffrg_GetFrame(anim, timer)
     if not anim.Lengths then
-        local anim_duration = anim.Time * anim.NumFrames
+        local anim_duration
+        if anim.Frames then
+            anim_duration = anim.Time * #anim.Frames
+        else
+            anim_duration = anim.Time * anim.NumFrames
+        end
         local time_mod = timer % anim_duration
         return math.ceil(time_mod / anim.Time)
     else
@@ -102,9 +110,17 @@ local function ffrg_GetFrame(anim, timer)
             anim_duration = anim_duration + length
         end
         local time_mod = timer % anim_duration
-        for frame, length in ipairs(anim.Lengths) do
-            time_mod = time_mod - length
-            if time_mod <= 0 then return frame end
+        if anim.Frames then
+            for i, length in ipairs(anim.Lengths) do
+                local frame = anim.Frames[i]
+                time_mod = time_mod - length
+                if time_mod <= 0 then return frame end
+            end
+        else
+            for frame, length in ipairs(anim.Lengths) do
+                time_mod = time_mod - length
+                if time_mod <= 0 then return frame end
+            end
         end
         return 0 -- should never trigger
     end
@@ -135,6 +151,7 @@ end
 --////////////////////////////////--
 
 local function ffrg_AddCustomProjectile(p1, p2, animation, config)
+    config = config or {}
     config.speed = config.speed or 12
     if config.directional == nil then
         config.directional = true
@@ -191,9 +208,15 @@ function ffrg_CustomProjectile_StandardHeightMap(portion)
 end
 
 local function ffrg_AddCustomArtillery(p1, p2, animation, config)
+    config = config or {}
+    config.duration = config.duration or 0.75
     config.height_map = config.height_map or "ffrg_CustomProjectile_StandardHeightMap"
+    config.custom_shadow = config.custom_shadow or ""
     if config.directional == nil then
         config.directional = true
+    end
+    if config.shadow == nil then
+        config.shadow = true
     end
     if config.damage then
         if config.path == nil then
@@ -213,6 +236,8 @@ local function ffrg_AddCustomArtillery(p1, p2, animation, config)
     end
     if ANIMS[animation] then
         anim = ANIMS[animation]
+        local s_x = ANIMS[config.custom_shadow] and ANIMS[config.custom_shadow].PosX or 0
+        local s_y = ANIMS[config.custom_shadow] and ANIMS[config.custom_shadow].PosY or 0
         if config.ret then
             if config.damage then
                 if config.path then
@@ -220,34 +245,46 @@ local function ffrg_AddCustomArtillery(p1, p2, animation, config)
                 else
                     config.damage.bHidePath = true
                 end
-                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" then
+                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" and config.duration == 0.75 then
                     config.ret:AddArtillery(p1, config.damage, "effects/ffrg_nil_"..config.trail..".png", NO_DELAY)
                 else
-                    config.ret:AddArtillery(p1, config.damage, "effects/ffrg_nil.png", NO_DELAY)
+                    if config.shadow then
+                        config.ret:AddArtillery(p1, config.damage, "effects/ffrg_nil.png", NO_DELAY)
+                    else
+                        config.ret:AddArtillery(p1, config.damage, "", NO_DELAY)
+                    end
                 end
             elseif config.path then
                 local path = SpaceDamage(p2, 0)
                 path.sAnimation = "nil"
-                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap"  then
+                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" and config.duration == 0.75 then
                     config.ret:AddArtillery(p1, path, "effects/ffrg_nil_"..config.trail..".png", NO_DELAY)
                 else
-                    config.ret:AddArtillery(p1, path, "effects/ffrg_nil.png", NO_DELAY)
+                    if config.shadow then
+                        config.ret:AddArtillery(p1, path, "effects/ffrg_nil.png", NO_DELAY)
+                    else
+                        config.ret:AddArtillery(p1, path, "", NO_DELAY)
+                    end
                 end
-            elseif config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap"  then
+            elseif config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" and config.duration == 0.75 then
                 local trail = SpaceDamage(p2, 0)
                 trail.sAnimation = "nil"
                 trail.bHidePath = true
                 config.ret:AddArtillery(p1, trail, "effects/ffrg_nil_"..config.trail..".png", NO_DELAY)
             end
-            config.ret:AddScript("ffrg_CustomProjectile.InsertCustomArtillery({duration = 0.75, point = "..p1:GetString()..", target = "..p2:GetString()..", x = "..anim.PosX..", o_x = "..anim.PosX..", y = "..anim.PosY..", o_y = "..anim.PosY..", dir = "..dir..", animation = \""..animation.."\", distance = "..distance..", finished = false, instance = 0, height_map = \""..config.height_map.."\"},"..tostring(tip)..")")
+            config.ret:AddScript("ffrg_CustomProjectile.InsertCustomArtillery({duration = "..config.duration..", point = "..p1:GetString()..", target = "..p2:GetString()..", x = "..anim.PosX..", o_x = "..anim.PosX..", s_x = "..s_x..", so_x = "..s_x..", y = "..anim.PosY..", o_y = "..anim.PosY..", s_y = "..s_y..", so_y = "..s_y..", dir = "..dir..", animation = \""..animation.."\", shadow = \""..config.custom_shadow.."\", distance = "..distance..", finished = false, instance = 0, height_map = \""..config.height_map.."\"},"..tostring(tip)..")")
         else
-            ffrg_InsertCustomArtillery({duration = 0.75, point = p1, target = p2, x = anim.PosX, o_x = anim.PosX, y = anim.PosY, o_y = anim.PosY, dir = dir, animation = animation, distance = distance, finished = false, instance = 0, height_map = config.height_map},tip)
+            ffrg_InsertCustomArtillery({duration = config.duration, point = p1, target = p2, x = anim.PosX, o_x = anim.PosX, s_x = s_x, so_x = s_x, y = anim.PosY, o_y = anim.PosY, s_y = s_y, so_y = s_y, dir = dir, animation = animation, shadow = config.custom_shadow, distance = distance, finished = false, instance = 0, height_map = config.height_map},tip)
             if config.damage then
                 local ret = SkillEffect()
-                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" then
+                if config.trail and config.height_map == "ffrg_CustomProjectile_StandardHeightMap" and config.duration == 0.75 then
                     ret:AddArtillery(p1, config.damage, "effects/ffrg_nil_"..config.trail..".png", NO_DELAY)
                 else
-                    ret:AddArtillery(p1, config.damage, "effects/ffrg_nil.png", NO_DELAY)
+                    if config.shadow then
+                        config.ret:AddArtillery(p1, config.damage, "effects/ffrg_nil.png", NO_DELAY)
+                    else
+                        config.ret:AddArtillery(p1, config.damage, "", NO_DELAY)
+                    end
                 end
                 Board:AddEffect(ret)
             elseif config.trail then
@@ -321,11 +358,30 @@ local function ProjectileProgress(boardTemp, animString)
                 ANIMS[anim_new_id].PosX = math.ceil(projectile.x)
                 ANIMS[anim_new_id].PosY = math.ceil(projectile.y)
                 boardTemp:AddAnimation(projectile.point, anim_new_id, 1)
+                if projectile.shadow and projectile.shadow ~= "" then
+                    local anim_sold = ANIMS[projectile.shadow]
+                    local anim_snew_id = animString..projectile.shadow.."_"..projectile.instance.."_"..projectile.point:GetString().."_"..projectile.dir.."_"..projectile.distance
+                    ANIMS[anim_snew_id] = {}
+                    ANIMS[anim_snew_id].Layer = 0
+                    ANIMS[anim_snew_id].Image = anim_sold.Image
+                    ANIMS[anim_snew_id].NumFrames = anim_sold.NumFrames
+                    ANIMS[anim_snew_id].Frames = { ffrg_GetFrame(anim_sold, projectile.timer) }
+                    ANIMS[anim_snew_id].Lengths = nil
+                    ANIMS[anim_snew_id].Loop = false
+                    ANIMS[anim_snew_id].Time = 0
+                    ANIMS[anim_snew_id].PosX = math.ceil(projectile.s_x)
+                    ANIMS[anim_snew_id].PosY = math.ceil(projectile.s_y)
+                    boardTemp:AddAnimation(projectile.point, anim_snew_id, 1)
+                end
             end
             if projectile.type == "artillery" then
                 local portion = projectile.timer/projectile.duration
                 projectile.x = projectile.o_x + (28*portion*projectile.distance*ffrg_GetXDirection(projectile.dir))
                 projectile.y = ( projectile.o_y + (21*portion*projectile.distance*ffrg_GetYDirection(projectile.dir)) ) - _G[projectile.height_map](portion)
+                if projectile.shadow ~= "" then
+                    projectile.s_x = projectile.so_x + (28*portion*projectile.distance*ffrg_GetXDirection(projectile.dir))
+                    projectile.s_y = projectile.so_y + (21*portion*projectile.distance*ffrg_GetYDirection(projectile.dir))
+                end
             else
                 projectile.x = projectile.x + ((projectile.speed*28)*time_delta*ffrg_GetXDirection(projectile.dir))
                 projectile.y = projectile.y + ((projectile.speed*28)*time_delta*0.75*ffrg_GetYDirection(projectile.dir))

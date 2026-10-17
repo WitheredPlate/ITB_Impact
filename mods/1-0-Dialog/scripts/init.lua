@@ -1,7 +1,7 @@
 local mod = {
 	id = "ffrg_impact_dialog",
 	name = "",
-	description = "-- Dialog --\n\nAdds new Dialog Events to both Vanilla and Impact Pilots to highlight new features.\nDialog Setting may require a game restart to function properly.\n\nEvents:\n - Heal\n - Boost\n - Supply\n - Deplete\n - Self-Damage\n",
+	description = "-- Dialog --\n\nAdds new Dialog Events to both Vanilla and Impact Pilots to highlight new features.\nDialog Setting may require a game restart to function properly.\n\nEvents:\n [Mech]\n  - Heal\n  - Boost\n  - Supply\n  - Deplete\n  - Self-Damage\n",
 	modApiVersion = "2.8.3",
 	version = ffrg_impact_version,
 	gameVersion = "1.2.83",

@@ -463,20 +463,14 @@ return {
 -- Arsenal --
 -------------
 
-	Mech_Push = {
-		""
-	},
-	Mech_Shove = {
-		""
-	},
-	Mech_Flip = {
-		""
+	Vek_Flip = {
+		"( ^,&++- )"
 	},
 	Mech_Accelerate = {
-		""
+		"( #@<,&++ )"
 	},
 	Mech_Overclock = {
-		""
+		"(( #@<,&+++- ))"
 	}
 }
 

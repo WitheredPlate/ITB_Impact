@@ -616,28 +616,20 @@ return {
 -- Arsenal --
 -------------
 
-	Mech_Push = {
-		"",
-		"",
-		"",
-		""
-	},
-	Mech_Shove = {
-		"",
-		""
-	},
-	Mech_Flip = {
-		"",
-		"",
-		""
+	Vek_Flip = {
+		"That Vek's been confounded.",
+		"The Vek is confused. Sperare debet mentem suam ultra non exuri.",
+		"It's rather amusing to see such pitifil creatures battered about."
 	},
 	Mech_Accelerate = {
-		"",
-		""
+		"Vek, your doom rapidly approaches.",
+		"The drive frame is quite a remarkable invention. I should look into integrating a compact version into my vault fabricators.",
+		"Fomes sicut sanguis fluit."
 	},
 	Mech_Overclock = {
-		"",
-		""
+		"These lesser algorithms believe they know better than I. Ulteriora violata dissolutionem periclitantur.",
+		"These algorithms would do best to silence themselves.",
+		"#self_mech has been granted potency. I'll see to it that it's used well."
 	}
 }
 

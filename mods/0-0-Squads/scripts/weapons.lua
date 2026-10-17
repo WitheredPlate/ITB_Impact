@@ -1027,7 +1027,7 @@ function ffrg_Ranged_DeployBastion:GetSkillEffect(p1, p2)
     local damage = SpaceDamage(p2,0)
     damage.sPawn = self.Deployed
     damage.sAnimation = "nil"
-    ret:AddDamage(SoundEffect(p1,self.WhooshSound))
+    ret:AddDamage(SoundEffect(Point(-1,-1),self.WhooshSound))
     ret:AddDelay(0.12)
     ret:AddBounce(p1, 2)
     ret:AddArtillery(damage,self.Projectile)

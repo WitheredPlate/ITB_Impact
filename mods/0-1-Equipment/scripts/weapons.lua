@@ -2011,8 +2011,39 @@ function ffrg_Support_DeployCannonTurret:GetFinalEffect(p1,p2,p3)
 end
 
 
+ffrg_Support_TrailerTurret = ffrg_Support_DeployCannonTurret:new{
+    Upgrades = 0
+}
+
+ffrg_TurretCounter = 0
+
+function ffrg_Support_TrailerTurret:GetSkillEffect(p1,p2)
+    local ret = SkillEffect()
+    local anim = SpaceDamage(p2,0)
+    local damage = SpaceDamage(p2,0)
+    if ffrg_TurretCounter%3 == 1 then
+        damage.sPawn = "ffrg_MortarTurret"
+        anim.sAnimation = "ffrg_turret_mortare"
+    elseif ffrg_TurretCounter%3 == 2 then
+        damage.sPawn = "ffrg_FlamerTurret"
+        anim.sAnimation = "ffrg_turret_flamere"
+    else
+        damage.sPawn = self.Deployed
+        anim.sAnimation = self.Anim
+    end
+    anim.sSound = self.WhirrSound
+    ret:AddScript("if Board then ffrg_TurretCounter = ffrg_TurretCounter + 1 end")
+    ret:AddDamage(anim)
+    ret:AddDelay(1.12)
+    ret:AddDamage(damage)
+    return ret
+end
+
+Weapon_Texts.ffrg_Support_TrailerTurret_Upgrade1 = "+1 Projectile"
+Weapon_Texts.ffrg_Support_TrailerTurret_Upgrade2 = "+1 Turret"
+
 ffrg_Support_DeployMortarTurret = ffrg_Support_DeployCannonTurret:new{
-    Name = "Cannon Mortar",
+    Name = "Mortar Turret",
     Description = "Deploy a Mortar Turret. It can fire damaging and pushing artilleries.",
     Icon = "weapons/ffrg_support_deploymortarturret.png",
     Deployed = "ffrg_MortarTurret",
@@ -2227,7 +2258,7 @@ function ffrg_Deploy_LightMortar:GetSkillEffect(p1, p2)
     ret:AddBounce(p1, 1)
     local damage = SpaceDamage(p2, self.Damage, dir)
     damage.sAnimation = self.Animation..dir
-    ffrg_CustomProjectile.AddCustomArtillery(p1,p2,self.ArtilleryAnimation,{ret = ret, damage = damage, directional = false})
+    ffrg_CustomProjectile.AddCustomArtillery(p1,p2,self.ArtilleryAnimation,{ret = ret, path = damage, directional = false})
     ret:AddDelay(0.75)
     ret:AddBounce(p2, 2)
     return ret
