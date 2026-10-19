@@ -1890,7 +1890,7 @@ end
 --////////////////////////////////--
 
 
-if not ffrg_Multihit or ( modApi:isVersion(ffrg_Multihit.Version, VERSION) and ffrg_Multihit.version ~= VERSION ) then
+if not ffrg_Multihit or ( modApi:isVersion(ffrg_Multihit.version, VERSION) and ffrg_Multihit.version ~= VERSION ) then
 
  --[[     Library    ]] ffrg_Multihit = ffrg_Multihit or {}
  --[[     Version    ]] ffrg_Multihit.version = VERSION
