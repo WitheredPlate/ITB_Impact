@@ -94,7 +94,7 @@ if ffrg_impact_tweaks_charge_adjustments then
 		local ret = SkillEffect()
 		local direction = GetDirection(p2 - p1)
 
-		local pathing = Pawn:GetPathProf()
+		local pathing = ( Pawn and Pawn:GetPathProf() ) or PATH_GROUND
 		if self.Fly then pathing = PATH_PROJECTILE end
 
 		local target = GetProjectileEnd(p1,p2,pathing)

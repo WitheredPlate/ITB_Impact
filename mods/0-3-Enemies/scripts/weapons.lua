@@ -214,7 +214,6 @@ ffrg_BomberbugAtk2 = ffrg_BomberbugAtk1:new{
     Name = "Scalding Expulsion",
     Description = "Fire two damaging and pushing projectiles in sequence.",
     ProjectileArt = "effects/ffrg_shot_bomberbug2",
-    Sound = "/enemy/firefly_soldier_2/attack",
     Animation = "ffrg_ExploBomberbug2_",
     Damage2 = 2,
     TipDamageCustom = "2x2",

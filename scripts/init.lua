@@ -1,4 +1,4 @@
-ffrg_impact_version = "1.1.1"
+ffrg_impact_version = "1.1.2"
 
 local mod = {
     id = "ffrg_impact",

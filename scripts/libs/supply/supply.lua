@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.2.2"
+local VERSION = "1.2.3"
 
 --## A library of functions largely for the Supply status, which refills a use of all limited use weapons on the target, with an accompanying visual and auditory cue.
 
@@ -158,9 +158,9 @@ local function SupplyUtilities(point,ret,index,hideIcon,repair)
     damagek.sSound = "/ui/battle/pod_open"
     damagek.fDelay = 0
     if repair > 0 then
-        damagek.sScript = "ffrg_Supply.AddUses("..point:GetString()..","..index..",1,true)"
+        damagek.sScript = "ttrg_Supply.AddUses("..point:GetString()..","..index..",1,true)"
     else
-        damagek.sScript = "ffrg_Supply.AddUses("..point:GetString()..","..index..",1,false)"
+        damagek.sScript = "ttrg_Supply.AddUses("..point:GetString()..","..index..",1,false)"
     end
     ret:AddDamage(damagek)
 end
@@ -178,9 +178,9 @@ local function SupplyUtilitiesDamage(point,index,hideIcon,repair)
     damagek.sSound = "/ui/battle/pod_open"
     damagek.fDelay = 0
     if repair > 0 then
-        damagek.sScript = "ffrg_Supply.AddUses("..point:GetString()..","..index..",1,true)"
+        damagek.sScript = "ttrg_Supply.AddUses("..point:GetString()..","..index..",1,true)"
     else
-        damagek.sScript = "ffrg_Supply.AddUses("..point:GetString()..","..index..",1,false)"
+        damagek.sScript = "ttrg_Supply.AddUses("..point:GetString()..","..index..",1,false)"
     end
     return damagek
 end
@@ -216,9 +216,7 @@ end
 local function SupplyIndex(callerPoint,point,callerPrevent)
     local limitIndex = 0
     if Board and Board:IsPawnSpace(point) and Board:GetPawn(point):IsMech() then
-
         local count = Board:GetPawn(point):GetWeaponCount()
-
         if count > 0 then
             for h = 1, count do
                 local powered = Board:GetPawn(point):IsWeaponPowered(Board:GetPawn(point):GetEquippedWeapons()[h])
@@ -245,9 +243,9 @@ local function Supply(callerPoint,point,ret,config)
         config.repair = config.repair + 1
     end
 
-    if limitIndex > 0 and config.returnDamage == false then
+    if limitIndex > 0 and not config.returnDamage then
         SupplyUtilities(point,ret,limitIndex,config.hideIcon,config.repair)
-    elseif limitIndex == 0 and config.returnDamage == false and config.hideIcon == false then
+    elseif limitIndex == 0 and not config.returnDamage and not config.hideIcon then
         SupplyRedundant(point,ret,config.repair)
     end
 
@@ -256,7 +254,7 @@ local function Supply(callerPoint,point,ret,config)
     else
         if limitIndex and limitIndex > 0 then
             return SupplyUtilitiesDamage(point,limitIndex,config.hideIcon,config.repair)
-        elseif config.hideIcon == false and config.repair == 0 then
+        elseif not config.hideIcon and config.repair == 0 then
             return SupplyRedundantDamage(point)
         else
             return SpaceDamage(point,0)
@@ -276,24 +274,33 @@ end
 --////////////////////////////////--
 
 
-local function initialize()
-    ffrg_Supply.Supply = Supply
-    ffrg_Supply.SupplyIndex = SupplyIndex
-    ffrg_Supply.AddUses = AddUses -- Technical but required global for scripting
-    ffrg_Supply.Version = VERSION
-    ffrg_Supply.events = {}
-    ffrg_Supply.events.onPawnIsSupplied = Event()
-end
+if not ffrg_Supply or not ffrg_Supply.version or ( modApi:isVersion(ffrg_Supply.version, VERSION) and ffrg_Supply.version ~= VERSION ) then
 
-if ffrg_Supply then
-    if modApi:isVersion(ffrg_Supply.Version, VERSION) and ffrg_Supply.Version ~= VERSION then
-        initialize()
-    end
-else
-    ffrg_Supply = ffrg_Supply or {}
-    initialize()
-end
+ --[[     Library    ]] ffrg_Supply = ffrg_Supply or {}
+ --[[     Version    ]] ffrg_Supply.version = VERSION
+ --[[ Initialization ]] ffrg_Supply.initialized = false
 
+ --[[    Overseer    ]] ffrg_Supply.events = {}
+ --[[      Event     ]] ffrg_Supply.events.onPawnIsSupplied = Event()
+
+ --[[  Compatibility ]] ffrg_Supply.Version = VERSION
+
+end
+local function ffrg_onModsInitialized()
+if ffrg_Supply.version == VERSION and not ffrg_Supply.initialized then
+
+ --[[     Library    ]] ttrg_Supply = ttrg_Supply or {}
+ --[[ Initialization ]] ffrg_Supply.initialized = true
+
+ --[[     Global     ]] ffrg_Supply.SupplyIndex = SupplyIndex
+ --[[     Global     ]] ffrg_Supply.Supply = Supply
+ --[[    Technical   ]] ttrg_Supply.AddUses = AddUses
+
+ --[[  Compatibility ]] ffrg_Supply.AddUses = ttrg_Supply.AddUses
+
+end
+end
+modApi.events.onModsInitialized:subscribe(ffrg_onModsInitialized)
 return ffrg_Supply
 
 

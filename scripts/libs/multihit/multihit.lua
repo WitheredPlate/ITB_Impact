@@ -21,9 +21,9 @@
 -- Description --
 -----------------
 
-local VERSION = "1.2.4"
+local VERSION = "1.2.5"
 
---## A library of functions for attacks that strike or fire projectiles multiple times in a row ##--
+--## A library of functions for attacks that strike or fire projectiles multiple times in a row. ##--
 
 
 ------------------
@@ -39,7 +39,9 @@ local VERSION = "1.2.4"
 ---------------------------
 
 --## queuedPreview.lua 1.0.0
+    -- Required for queued multihit attacks
 --## customProjectile.lua 1.0.1
+    -- Required for animated multihit projectile attacks
 
 
 ----------------------
@@ -739,18 +741,6 @@ local function ffrg_onMissionStart(...)
     ffrg_MultihitForceSet()
 end
 
-local function ffrg_onModsInitialized(...)
-    modApi:runLater(function()
-        WeaponPreview.events.onSkillEffectHidden:subscribe(ffrg_onSkillEffectHidden)
-        WeaponPreview.events.onFinalEffectHidden:subscribe(ffrg_onFinalEffectHidden)
-        WeaponPreview.events.onQueuedSkillEffectHidden:subscribe(ffrg_onQueuedSkillEffectHidden)
-    end)
-end
-
-modApi.events.onModsInitialized:subscribe(ffrg_onModsInitialized)
-modApi.events.onMissionStart:subscribe(ffrg_onMissionStart)
-modApi.events.onNextTurn:subscribe(ffrg_onNextTurn)
-
 
 --////////////////////////////////--
 
@@ -826,9 +816,6 @@ local function ffrg_onSecondTargetAreaBuild(mission, pawn, weaponId, p1, p2, poi
         ffrg_TipWeaponId = weaponId
     end
 end
-
-modapiext.events.onTargetAreaBuild:subscribe(ffrg_onTargetAreaBuild)
-modapiext.events.onSecondTargetAreaBuild:subscribe(ffrg_onSecondTargetAreaBuild)
 
 
 --////////////////////////////////--
@@ -1903,21 +1890,33 @@ end
 --////////////////////////////////--
 
 
-local function initialize()
-    ffrg_Multihit.MultihitMelee = MultihitMelee
-    ffrg_Multihit.MultihitProjectile = MultihitProjectile
-    ffrg_Multihit.Version = VERSION
-end
+if not ffrg_Multihit or ( modApi:isVersion(ffrg_Multihit.Version, VERSION) and ffrg_Multihit.version ~= VERSION ) then
 
-if ffrg_Multihit then
-    if modApi:isVersion(ffrg_Multihit.Version, VERSION) and ffrg_Multihit.Version ~= VERSION then
-        initialize()
-    end
-else
-    ffrg_Multihit = ffrg_Multihit or {}
-    initialize()
-end
+ --[[     Library    ]] ffrg_Multihit = ffrg_Multihit or {}
+ --[[     Version    ]] ffrg_Multihit.version = VERSION
+ --[[ Initialization ]] ffrg_Multihit.initialized = false
 
+end
+local function ffrg_onModsInitialized()
+if ffrg_Multihit.version == VERSION and not ffrg_Multihit.initialized then
+
+ --[[     Library    ]] ttrg_Multihit = ttrg_Multihit or {}
+ --[[ Initialization ]] ffrg_Multihit.initialized = true
+
+ --[[     Global     ]] ffrg_Multihit.MultihitMelee = MultihitMelee
+ --[[     Global     ]] ffrg_Multihit.MultihitProjectile = MultihitProjectile
+
+ --[[  Subscription  ]] modApi.events.onMissionStart:subscribe(ffrg_onMissionStart)
+ --[[  Subscription  ]] modApi.events.onNextTurn:subscribe(ffrg_onNextTurn)
+ --[[  Subscription  ]] modapiext.events.onTargetAreaBuild:subscribe(ffrg_onTargetAreaBuild)
+ --[[  Subscription  ]] modapiext.events.onSecondTargetAreaBuild:subscribe(ffrg_onSecondTargetAreaBuild)
+                        modApi:runLater(function()
+ --[[   Dependency   ]] WeaponPreview.events.onSkillEffectHidden:subscribe(ffrg_onSkillEffectHidden)
+ --[[   Dependency   ]] WeaponPreview.events.onFinalEffectHidden:subscribe(ffrg_onFinalEffectHidden)
+ --[[   Dependency   ]] WeaponPreview.events.onQueuedSkillEffectHidden:subscribe(ffrg_onQueuedSkillEffectHidden)
+                        end)
+end end
+modApi.events.onModsInitialized:subscribe(ffrg_onModsInitialized)
 return ffrg_Multihit
 
 

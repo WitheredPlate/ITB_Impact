@@ -47,7 +47,7 @@ function mod:load(options, version)
 			"ffrg_UpheavalMech"			-- mech #3
 		},
 		"Seismic Colossi",
-		"Engineered with Detritus excavation technology, these industrial Mechs can reshape earth to their will.",
+		"Engineered with Harmony excavation technology, these industrial Mechs can reshape earth to their will.",
 		self.resourcePath .."img/icons/seismic_colossi.png"
 	)
 	modApi:addSquad(
