@@ -685,7 +685,9 @@ ffrg_Prime_Maul = Skill:new{
         Unit = Point(2,3),
         Enemy = Point(2,2),
         Enemy2 = Point(3,2),
+        Queued2 = Point(3,3),
         Target = Point(2,2),
+        CustomEnemy = "Firefly2",
         Length = 5.5
     }
 }
@@ -1112,7 +1114,7 @@ end
 
 ffrg_Ranged_TC_Silica = LineArtillery:new{
     Name = "Horus Drill",
-    Description = "Fire a damaging and flipping artillery that burrows to a nearby tile, damaging and pushing an additional target.",
+    Description = "Fire a flipping drill artillery that burrows to and emerges from a nearby tile.",
     Class = "Ranged",
     Icon = "weapons/ffrg_ranged_silica.png",
     Explosion = "",
@@ -1132,11 +1134,13 @@ ffrg_Ranged_TC_Silica = LineArtillery:new{
     UpgradeCost = {1,2},
     TipImage = {
         Unit = Point(1,3),
-        Enemy = Point(1,1),
+        Enemy1 = Point(1,1),
+        Queued1 = Point(1,2),
         Enemy2 = Point(3,1),
         Target = Point(1,1),
         Second_Click = Point(3,1),
-        Length = 6,
+        CustomEnemy = "Firefly2",
+        Length = 6
     }
 }
 
@@ -1153,7 +1157,8 @@ ffrg_Ranged_TC_Silica_B = ffrg_Ranged_TC_Silica:new{
         Enemy2 = Point(4,1),
         Target = Point(1,1),
         Second_Click = Point(4,1),
-        Length = 6,
+        CustomEnemy = "Firefly2",
+        Length = 6
     }
 }
 ffrg_Ranged_TC_Silica_AB = ffrg_Ranged_TC_Silica:new{
@@ -1165,27 +1170,13 @@ ffrg_Ranged_TC_Silica_AB = ffrg_Ranged_TC_Silica:new{
         Enemy2 = Point(4,1),
         Target = Point(1,1),
         Second_Click = Point(4,1),
-        Length = 6,
+        CustomEnemy = "Firefly2",
+        Length = 6
     }
 }
 
 Weapon_Texts.ffrg_Ranged_TC_Silica_Upgrade1 = "+1 Damage"
 Weapon_Texts.ffrg_Ranged_TC_Silica_Upgrade2 = "Unlimited Range"
-
-function ffrg_Ranged_TC_Silica:IsTwoClickException(p1,p2)
-	if ffrg_Ranged_TC_Silica:IsBurrowable(p2) == false then
-		return true
-    else
-        for i = DIR_START, DIR_END do
-            local curr = p2 + DIR_VECTORS[i]
-            if ffrg_Ranged_TC_Silica:IsBurrowable(curr) then
-                return false
-            end
-        end
-	end
-
-	return true
-end
 
 function ffrg_Ranged_TC_Silica:GetSkillEffect(p1,p2)
     local ret = SkillEffect()
@@ -1224,6 +1215,21 @@ function ffrg_Ranged_TC_Silica:GetSkillEffect(p1,p2)
         end
     end
     return ret
+end
+
+function ffrg_Ranged_TC_Silica:IsTwoClickException(p1,p2)
+	if ffrg_Ranged_TC_Silica:IsBurrowable(p2) == false then
+		return true
+    else
+        for i = DIR_START, DIR_END do
+            local curr = p2 + DIR_VECTORS[i]
+            if ffrg_Ranged_TC_Silica:IsBurrowable(curr) then
+                return false
+            end
+        end
+	end
+
+	return true
 end
 
 function ffrg_Ranged_TC_Silica:GetSecondTargetArea(p1,p2)
@@ -1695,7 +1701,7 @@ ffrg_Support_MountedArmaments = Skill:new{
     Name = "Mounted Armaments",
     Class = "",
     Icon = "weapons/ffrg_support_mountedarmaments.png",
-    Description = "Fire damaging and pushing projectiles from all allied units.",
+    Description = "Fire damaging and pushing projectiles from all animate allied units.",
     FireSound = "weapons/modified_cannons",
     HitSound = "impact/generic/explosion",
     Animation = "explopush1_",
@@ -1785,14 +1791,17 @@ function ffrg_Support_MountedArmaments:GetSkillEffect(p1, p2)
 			elseif direction == DIR_DOWN then
 				point = Point(i,7-j)
 			end
-			if Board:IsPawnSpace(point) and Board:GetPawn(point):GetTeam() == TEAM_PLAYER and not Board:GetPawn(point):IsDead() and Board:GetPawn(point):IsPowered() and Board:IsValid(point+DIR_VECTORS[direction]) then
-                ret:AddDelay(0.2)
-                local curr = GetProjectileEnd(point,point+DIR_VECTORS[direction])
-                local projectile = SpaceDamage(curr,self.Damage,direction)
-                projectile.sAnimation = self.Animation..direction
-                projectile.sSound = self.HitSound
-                ret:AddDamage(SoundEffect(point, self.FireSound))
-                ret:AddProjectile(point,projectile,self.ProjectileArt,NO_DELAY)
+			if Board:IsPawnSpace(point) then
+                local pawn = Board:GetPawn(point)
+                if pawn:GetTeam() == TEAM_PLAYER and not pawn:IsFrozen() and not pawn:IsDead() and pawn:IsPowered() and (pawn:GetWeaponCount() > 0 or pawn:GetMoveSpeed() > 0 or pawn:GetBaseMove() > 0) and Board:IsValid(point+DIR_VECTORS[direction]) then -- Only activate for pawns that can either move or fire weapons
+                    ret:AddDelay(0.2)
+                    local curr = GetProjectileEnd(point,point+DIR_VECTORS[direction])
+                    local projectile = SpaceDamage(curr,self.Damage,direction)
+                    projectile.sAnimation = self.Animation..direction
+                    projectile.sSound = self.HitSound
+                    ret:AddDamage(SoundEffect(point, self.FireSound))
+                    ret:AddProjectile(point,projectile,self.ProjectileArt,NO_DELAY)
+                end
             end
         end
     end

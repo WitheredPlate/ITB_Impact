@@ -498,6 +498,44 @@ local MultipushLengthBank = {
     push_push_push = 3,
 }
 
+local multihitFilesAncillary = {
+    "multihit_ancillary_1",
+    "multihit_ancillary_2",
+    "multihit_ancillary_3",
+    "multihit_ancillary_4",
+    "multihit_ancillary_5",
+    "multihit_ancillary_6",
+    "multihit_ancillary_7",
+    "multihit_ancillary_8"
+}
+
+for _, file in ipairs(multihitFilesAncillary) do
+    modApi:appendAsset("img/combat/icons/multihit/"..file..".png", multihitPath..file..".png")
+    modApi:appendAsset("img/combat/icons/multihit/"..file.."_U.png", multihitPath..file..".png")
+    modApi:appendAsset("img/combat/icons/multihit/"..file.."_R.png", multihitPath..file..".png")
+    modApi:appendAsset("img/combat/icons/multihit/"..file.."_D.png", multihitPath..file..".png")
+    modApi:appendAsset("img/combat/icons/multihit/"..file.."_L.png", multihitPath..file..".png")
+    Location["combat/icons/multihit/"..file..".png"] = Point(-9,10)
+    Location["combat/icons/multihit/"..file.."_U.png"] = Point(19,-11)
+    Location["combat/icons/multihit/"..file.."_R.png"] = Point(19,31)
+    Location["combat/icons/multihit/"..file.."_D.png"] = Point(-37,31)
+    Location["combat/icons/multihit/"..file.."_L.png"] = Point(-37,-11)
+end
+
+modApi:appendAsset("img/combat/icons/multihit/multihit_ancillary_block.png", multihitPath.."multihit_ancillary_0.png")
+Location["combat/icons/multihit/multihit_ancillary_block.png"] = Point(-8,9)
+Location["combat/icons/multihit/multihit_ancillary_block_U.png"] = Point(20,-12)
+Location["combat/icons/multihit/multihit_ancillary_block_R.png"] = Point(20,30)
+Location["combat/icons/multihit/multihit_ancillary_block_D.png"] = Point(-36,30)
+Location["combat/icons/multihit/multihit_ancillary_block_L.png"] = Point(-36,-12)
+modApi:appendAsset("img/combat/icons/multihit/multihit_ancillary_negate.png", multihitPath.."multihit_ancillary_0.png")
+Location["combat/icons/multihit/multihit_ancillary_negate.png"] = Point(-8,10)
+Location["combat/icons/multihit/multihit_ancillary_negate_U.png"] = Point(20,-11)
+Location["combat/icons/multihit/multihit_ancillary_negate_R.png"] = Point(20,31)
+Location["combat/icons/multihit/multihit_ancillary_negate_D.png"] = Point(-36,31)
+Location["combat/icons/multihit/multihit_ancillary_negate_L.png"] = Point(-36,-11)
+
+
 local function MultiPushAnimGen(indicator, x, y)
     ANIMS[indicator] = Animation:new{
         Image = "combat/multipush/"..indicator..".png",
@@ -803,6 +841,20 @@ local function QueuedDamageIconAdd(icon, dir, curr, array)
     table.insert(array, { type = "damage", focused = true, data = damage } )
 end
 
+local function MultihitAncillaryIcon(damage, point)
+    if Board:IsPawnSpace(point) then
+        local pawn = Board:GetPawn(point)
+        if pawn:IsShield() or pawn:IsFrozen() then return "combat/icons/multihit/multihit_ancillary_block.png"
+        elseif pawn:IsAcid() then return "combat/icons/multihit/multihit_ancillary_"..(damage*2)..".png"
+        elseif pawn:IsArmor() and damage > 1 then return "combat/icons/multihit/"..(damage-1)..".png"
+        elseif pawn:IsArmor() then return "combat/icons/multihit/multihit_ancillary_negate.png"
+        else return "combat/icons/multihit/multihit_ancillary_"..damage..".png" end
+    else
+        if Board:IsShield(point) or Board:IsFrozen(point) then return "combat/icons/multihit/multihit_ancillary_block.png"
+        else return "combat/icons/multihit/multihit_ancillary_"..damage..".png" end
+    end
+end
+
 local ffrg_TipWeaponId = ""
 
 local function ffrg_onTargetAreaBuild(mission, pawn, weaponId, point, pointList)
@@ -1105,7 +1157,7 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
 
         if Board:IsPawnSpace(targetPoint) then
             local pawn = Board:GetPawn(targetPoint)
-            if pawn:IsCorpse() then
+            if pawn:IsCorpse() and (not pawn.ffrg_IsEffigy or not pawn:ffrg_IsEffigy()) then
                 targetData.type = "pawn_corpse"
             else
                 targetData.type = "pawn"
@@ -1200,7 +1252,8 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
             bonus_damage = 0,
             bump_damage = 0,
             bonus_bonk = 0,
-            push_sequence = {}
+            push_sequence = {},
+            strike = false
         })
         table.insert(targetArray,targetData)
     end
@@ -1220,6 +1273,7 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
                 local hitType = "null"
                 if targetData.type == "obstacle" then
                     outputArray[j].hits = outputArray[j].hits + 1
+                    outputArray[j].strike = true
                     if damage > 0 then
                         if targetData.freeze then
                             targetData.freeze = false
@@ -1242,7 +1296,8 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
                         table.insert(outputArray[j].push_sequence, "null")
                     end
                 else
-                    outputArray[j-targetData.offset].hits = outputArray[j-targetData.offset].hits+1
+                    outputArray[j-targetData.offset].hits = outputArray[j-targetData.offset].hits + 1
+                    outputArray[j-targetData.offset].strike = true
                     if targetData.frozen then
                         targetData.frozen = false
                         outputArray[j-targetData.offset].bonus_bonk = outputArray[j-targetData.offset].bonus_bonk + 1
@@ -1495,6 +1550,7 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
             elseif j == #targetArray then
                 outputArray[j].shots = outputArray[j].shots + 1
                 outputArray[j].hits = outputArray[j].hits + 1
+                outputArray[j].strike = true
                 table.insert(outputArray[j].hit_sequence, "null")
                 -- Adds a hit if a projectile reaches the board edge w/out hitting anything
                 if push and not flag_miss then
@@ -1516,33 +1572,37 @@ local function MultihitProjectilePreview(damage, attacks, dir, push, boost, path
         if finalArray[i].shots ~= 0 then
             lastShot = i
         end
-        if outputArray[i].hits > 1 then
-            local damage_icon = "combat/icons/multihit/multihit_"..outputArray[i].hits
-            local hit_type = outputArray[i].hit_type
-            if hit_type ~= "" then
-                damage_icon = damage_icon.."_"..hit_type
-            end
-            local hit_modifier = ""
-            local hit_flag = false
-            local hit_sequence = outputArray[i].hit_sequence
-            local length = #hit_sequence
-            for j = 1, length do
-                local hit = hit_sequence[length - j + 1]
-                if hit == "acidify" and ( hit_type == "boost" or hit_type == "acid" ) then
-                    hit = "null"
+        if outputArray[i].strike then
+            if outputArray[i].hits > 1 then
+                local damage_icon = "combat/icons/multihit/multihit_"..outputArray[i].hits
+                local hit_type = outputArray[i].hit_type
+                if hit_type ~= "" then
+                    damage_icon = damage_icon.."_"..hit_type
                 end
-                if hit_flag == true or hit ~= "null" then
-                    hit_flag = true
-                    hit_modifier = hit..hit_modifier
-                    hit_modifier = "_"..hit_modifier
+                local hit_modifier = ""
+                local hit_flag = false
+                local hit_sequence = outputArray[i].hit_sequence
+                local length = #hit_sequence
+                for j = 1, length do
+                    local hit = hit_sequence[length - j + 1]
+                    if hit == "acidify" and ( hit_type == "boost" or hit_type == "acid" ) then
+                        hit = "null"
+                    end
+                    if hit_flag == true or hit ~= "null" then
+                        hit_flag = true
+                        hit_modifier = hit..hit_modifier
+                        hit_modifier = "_"..hit_modifier
+                    end
                 end
+                if hit_modifier ~= "" then
+                    damage_icon = damage_icon..hit_modifier
+                end
+                finalArray[i].damage_icon = damage_icon..".png"
+            else
+                finalArray[i].damage_icon = ""
             end
-            if hit_modifier ~= "" then
-                damage_icon = damage_icon..hit_modifier
-            end
-            finalArray[i].damage_icon = damage_icon..".png"
         else
-            finalArray[i].damage_icon = ""
+            finalArray[i].damage_icon = MultihitAncillaryIcon(damage,pathArray[i])
         end
 
         local push_sequence = outputArray[i].push_sequence
@@ -1641,7 +1701,7 @@ local function MultihitProjectile(damage, attacks, point, dir, config)
             if not config.queued and config.projectile_speed and ffrg_WorldConstants then
                 ffrg_WorldConstants:setSpeed(config.ret, (config.projectile_speed/18))
             end
-            if not Board:IsTipImage() then
+            if not Board:IsTipImage() and not Board:IsBusy() then
                 Passive_ForceAmp.Passive = "Passive_ForceAlt"
                 config.ret:AddScript("ffrg_MultihitForceSet()")
             end

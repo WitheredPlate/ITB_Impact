@@ -122,7 +122,7 @@ local VERSION = "1.0.7"
 -- Optionally also appends the specified exclusion data immediately upon creation.
 -- Accepts both single elements as a string or an array of said elements and does not add elements that are already present in the event of a behavior defaulting.
 
---## ffrg_SpawnController.AddExclusionTail
+--## ffrg_SpawnController.ExclusionTail
 -- ( identifier [String],  exclusion [Array or String],  myriad [Boolean, optional] )
 -- Creates a new exclusion tail or adds to an existing one for the specified identifier that can be referenced or appended to later.
 -- If no exclusion with the specified identifier exists, creates an empty exclusion with the specified identifier.

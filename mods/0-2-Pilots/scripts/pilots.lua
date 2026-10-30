@@ -268,10 +268,12 @@ ffrg_Emitter_Confuse = Emitter_Confuse1:new{
 local resetCharge = false
 
 local function BoardHasMartyr()
-	for id = 0, 2 do
-		if Board:GetPawn(id):IsAbility(pilot_martyr.Skill) then
-			return true
-		end
+    if Board then
+        for id = 0, 2 do
+            if Board:GetPawn(id):IsAbility(pilot_martyr.Skill) then
+                return true
+            end
+        end
 	end
 end
 
@@ -338,16 +340,9 @@ CreatePilot(pilot_engi)
 
 ffrg_Repair_Engi = Skill_Repair:new{
     Name = "Flawless Repair",
-    Description = "Repair 10 points of damage; remove Fire, Ice, and A.C.I.D; and apply Shield, Boost and Supply.",
+    Description = "Repair 10 damage; clear debuffs; and apply Shield, Boost and Supply.",
     Amount = -10,
-    LaunchSound = "/weapons/refrigerate",
-    TipImage = {
-        Unit = Point(2,2),
-        Target = Point(2,2),
-        Fire = Point(2,2),
-        Second_Click = Point(3,2),
-        Length = 6
-    }
+    LaunchSound = "/weapons/refrigerate"
 }
 
 local ffrg_Engi_Supplyable = false

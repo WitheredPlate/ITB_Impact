@@ -162,10 +162,11 @@ ffrg_CannonTurret = Pawn:new{
     Corpse = false,
     Pushable = false,
 }
-
 ffrg_CannonTurretA = ffrg_CannonTurret:new{
     SkillList = { "ffrg_Deploy_Multishot_A" },
 }
+AddPawnName("ffrg_CannonTurret")
+AddPawnName("ffrg_CannonTurretA")
 
 
 -------------------
@@ -185,10 +186,11 @@ ffrg_MortarTurret = Pawn:new{
     Corpse = false,
     Pushable = false,
 }
-
 ffrg_MortarTurretA = ffrg_MortarTurret:new{
     SkillList = { "ffrg_Deploy_LightMortar_A" },
 }
+AddPawnName("ffrg_MortarTurret")
+AddPawnName("ffrg_MortarTurretA")
 
 
 -------------------
@@ -208,10 +210,11 @@ ffrg_FlamerTurret = Pawn:new{
     Corpse = false,
     Pushable = false,
 }
-
 ffrg_FlamerTurretA = ffrg_FlamerTurret:new{
     SkillList = { "ffrg_Deploy_LightFlamer_A" },
 }
+AddPawnName("ffrg_FlamerTurret")
+AddPawnName("ffrg_FlamerTurretA")
 
 
 --////////////////////////////////--

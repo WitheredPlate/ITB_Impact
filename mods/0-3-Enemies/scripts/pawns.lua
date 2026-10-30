@@ -230,7 +230,7 @@ ffrg_Bomberbug1 = Pawn:new{
     ImpactMaterial = IMPACT_FLESH,
 }
 AddPawnName("ffrg_Bomberbug1")
-
+modApi:setText("ffrg_Bomberbug1", "Bomberbug")
 
 -----------------------
 -- Alpha Caterpillar --
@@ -247,6 +247,7 @@ ffrg_Bomberbug2 = ffrg_Bomberbug1:new{
     Tier = TIER_ALPHA,
 }
 AddPawnName("ffrg_Bomberbug2")
+modApi:setText("ffrg_Bomberbug2", "Alpha Bomberbug")
 
 
 ----------------------
@@ -264,6 +265,7 @@ ffrg_BomberbugBoss = ffrg_Bomberbug1:new{
     Tier = TIER_BOSS,
 }
 AddPawnName("ffrg_BomberbugBoss")
+modApi:setText("ffrg_BomberbugBoss", "Bomberbug Leader")
 
 
 -----------------
@@ -282,6 +284,7 @@ ffrg_Caterpillar1 = Pawn:new{
     ImpactMaterial = IMPACT_FLESH,
 }
 AddPawnName("ffrg_Caterpillar1")
+modApi:setText("ffrg_Caterpillar1", "Caterpillar")
 
 
 -----------------------
@@ -298,6 +301,7 @@ ffrg_Caterpillar2 = ffrg_Caterpillar1:new{
     Tier = TIER_ALPHA,
 }
 AddPawnName("ffrg_Caterpillar2")
+modApi:setText("ffrg_Caterpillar2", "Alpha Caterpillar")
 
 
 ------------------------
@@ -314,6 +318,7 @@ ffrg_CaterpillarBoss = ffrg_Caterpillar1:new{
     Tier = TIER_BOSS,
 }
 AddPawnName("ffrg_CaterpillarBoss")
+modApi:setText("ffrg_CaterpillarBoss", "Caterpillar Leader")
 
 
 ------------------
@@ -333,6 +338,7 @@ ffrg_Snowshred1 = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
 }
 AddPawnName("ffrg_Snowshred1")
+modApi:setText("ffrg_Snowshred1", "Shredder-Bot")
 
 -------------------
 -- Shredder-Mech --
@@ -347,6 +353,7 @@ ffrg_Snowshred2 = ffrg_Snowshred1:new{
     Tier = TIER_ALPHA,
 }
 AddPawnName("ffrg_Snowshred2")
+modApi:setText("ffrg_Snowshred2", "Shredder-Mech")
 
 
 -------------------
@@ -361,3 +368,4 @@ ffrg_Snowshred1_Boom = ffrg_Snowshred1:new{
     Explodes = true
 }
 AddPawnName("ffrg_Snowshred1_Boom")
+modApi:setText("ffrg_Snowshred1_Boom", "Boom Shredder")

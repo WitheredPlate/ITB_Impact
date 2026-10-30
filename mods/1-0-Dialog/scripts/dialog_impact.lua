@@ -357,7 +357,7 @@ return {
         Mech_Deplete = {
             "I have no need for weapons that cannot deal judgement unconditionally.",
             "This scrap proves its lack of worth yet again.",
-            "This weapon is now useless"
+            "This weapon is now useless."
         },
         Mech_SelfDamage = {
             "The chosen one can withstand any trial!",

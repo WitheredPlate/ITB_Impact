@@ -3,7 +3,10 @@
 --////////////////////////////////--
 
 --== Prime ==--
--- Prism Laser (++~)
+-- Prism Laser (++-)
+
+--== Ranged ==--
+-- Rock Accelerator (+--)
 
 --== Support ==--
 -- Repair Drop (+)
@@ -202,9 +205,9 @@ Prime_PrismLaser_AB = Prime_PrismLaser:new{
     }
 }
 
-modApi:setText("Prime_PrismLaser_A_UpgradeDescription", "Beam starts at +1 damage.")
+modApi:setText("Prime_PrismLaser_A_UpgradeDescription", "Increases the starting damage by 1.")
 modApi:setText("Prime_PrismLaser_B_UpgradeDescription", "Buildings will not take damage from this attack.")
-modApi:setText("Prime_PrismLaser_Upgrade1", "+1 Damage")
+modApi:setText("Prime_PrismLaser_Upgrade1", "+1 Min Damage")
 modApi:setText("Prime_PrismLaser_Upgrade2", "Buildings Immune")
 
 
@@ -301,6 +304,7 @@ Weapon_Texts.Support_Repair_Upgrade2 = "+1 Use"
 
 Ranged_Rockthrow.Upgrades = 2
 Ranged_Rockthrow.Slab = false
+Ranged_Rockthrow.PowerCost = 1
 Ranged_Rockthrow.UpgradeCost = {2,1}
 
 Ranged_Rockthrow_A = Ranged_Rockthrow:new{

@@ -298,6 +298,8 @@ ffrg_Prime_BoulderFlail = Skill:new{
         Unit = Point(2,4),
         Enemy = Point(2,2),
         Enemy2 = Point(2,1),
+        Queued2 = Point(3,1),
+        CustomEnemy = "Firefly2",
         Target = Point(2,1)
     }
 }
@@ -739,7 +741,8 @@ ffrg_Brute_SawCharge = Skill:new{
     TipImage = {
         Unit = Point(2,3),
         Building = Point(3,1),
-        Enemy = Point(3,2),
+        Enemy1 = Point(3,2),
+        Queued1 = Point(3,1),
         Enemy2 = Point(1,1),
         Target = Point(2,0)
     }
@@ -764,9 +767,8 @@ Weapon_Texts.ffrg_Brute_SawCharge_Upgrade2 = "+1 Damage"
 
 function ffrg_Brute_SawCharge:GetTargetArea(point)
 	local ret = PointList()
-
 	for i = DIR_START, DIR_END do
-		for k = 1, 8 do
+		for k = 1, 7 do
 			local curr = DIR_VECTORS[i]*k + point
 			if Board:IsValid(curr) and not Board:IsBlocked(curr, Pawn:GetPathProf()) then
 				ret:push_back(DIR_VECTORS[i]*k + point)
@@ -1289,7 +1291,7 @@ ffrg_Science_TC_LongTele = Skill:new{
 }
 
 ffrg_Science_TC_LongTele_A = ffrg_Science_TC_LongTele:new{
-    UpgradeDescription = "Deals 2 damage to teleported enemies.",
+    UpgradeDescription = "Increases damage dealt to teleported enemies to 2.",
     Hurt = true,
     Damage = 2,
     TipImage = {
@@ -1817,7 +1819,7 @@ ffrg_Passive_Phoenix = PassiveSkill:new{
     Description = "Mechs revived from destruction are Boosted and Supplied.\nAll Pilots will survive Mech destruction.",
     Class = "",
     Icon = "weapons/ffrg_passive_phoenix.png",
-    Passive = "Passive_Medical_Phoenix",
+    Passive = "Passive_Medical_ffrg_Phoenix",
     TipImage = {
         CustomPawn = "ScienceMech",
         Unit_Damaged = Point(2,2),
@@ -1841,7 +1843,7 @@ function ffrg_Passive_Phoenix:Boost(point)
 end
 
 local function ffrg_onPawnRevived(mission, pawn)
-    if IsPassiveSkill("Passive_Medical_Phoenix") and pawn:IsMech() then
+    if IsPassiveSkill("Passive_Medical_ffrg_Phoenix") and pawn:IsMech() then
         pawn:SetBoosted(true)
         local point = pawn:GetSpace()
         if point then

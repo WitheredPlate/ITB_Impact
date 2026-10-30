@@ -489,6 +489,7 @@ ffrg_PrismMech = Pawn:new{
     Massive = true,
     LargeShield = true,
 }
+AddPawnName("ffrg_PrismMech")
 
 
 ------------------
@@ -509,6 +510,7 @@ ffrg_BulwarkMech = Pawn:new{
     Massive = true,
     LargeShield = true,
 }
+AddPawnName("ffrg_BulwarkMech")
 
 
 ----------------------
@@ -529,6 +531,7 @@ ffrg_DisassemblyMech = Pawn:new{
     Massive = true,
     Armor = true,
 }
+AddPawnName("ffrg_DisassemblyMech")
 
 
 -------------------
@@ -548,6 +551,7 @@ ffrg_BruiserMech = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
     Massive = true,
 }
+AddPawnName("ffrg_BruiserMech")
 
 
 -------------------
@@ -568,6 +572,7 @@ ffrg_StrafeMech = Pawn:new{
     Massive = true,
     Flying = true,
 }
+AddPawnName("ffrg_StrafeMech")
 
 
 -------------------
@@ -587,6 +592,7 @@ ffrg_UpheavalMech = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
     Massive = true,
 }
+AddPawnName("ffrg_UpheavalMech")
 
 
 -------------------
@@ -607,6 +613,7 @@ ffrg_ManifoldMech = Pawn:new{
     Massive = true,
     LargeShield = true,
 }
+AddPawnName("ffrg_ManifoldMech")
 
 
 ----------------
@@ -626,6 +633,7 @@ ffrg_RazorMech = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
     Massive = true,
 }
+AddPawnName("ffrg_RazorMech")
 
 
 ----------------------
@@ -645,6 +653,7 @@ ffrg_MaintenanceMech = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
     Massive = true,
 }
+AddPawnName("ffrg_MaintenanceMech")
 
 
 -------------
@@ -662,7 +671,6 @@ ffrg_Bastion = Pawn:new{
     ImpactMaterial = IMPACT_METAL,
     Corpse = false,
 }
-
 ffrg_BastionA = ffrg_Bastion:new{
     MoveSpeed = 3
 }
@@ -673,6 +681,10 @@ ffrg_BastionAB = ffrg_Bastion:new{
     MoveSpeed = 3,
     Armor = true
 }
+AddPawnName("ffrg_Bastion")
+AddPawnName("ffrg_BastionA")
+AddPawnName("ffrg_BastionB")
+AddPawnName("ffrg_BastionAB")
 
 -- Web turn loss protection
 local function ffrg_onPawnIsGrappled(mission,pawn,isGrappled)
