@@ -21,21 +21,10 @@
 -- Description --
 -----------------
 
-local VERSION = "1.0.7"
+local VERSION = "1.1.0"
 
 --## A library of functions to control the vanilla data the game uses to control how, when, and how many different enemies appear.
 --## Mostly dedicated towards controlling exclusions, which prevent enemies and other elements from appearing with other enemies and elements.
-
-
-------------------
--- Spawner Data --
-------------------
-
---## Spawner data is defined for each enemy and controls a wide variety of functions around what circumstances that enemy can be and is spawned.
---## Flying should indicate whether or not the enemy is flying. Only one flying enemy can be encountered on each island.
---## Weak should indicate whether or not the enemy is a chaff unit and should spawn more often. In practice, this means this is true for common vek and false for rare vek. This is also set to true for Psions and used to make Missile-Bots rarer than their two companions.
---## Max Pawns should indicate how many of the pawn is allowed to spawn in one mission. If all enemies in a mission meet their limit for max pawns, this limit is ignored for weak pawns only.
---## Max Level should indicate the maximum tier this unit is allowed to be upgraded to, where normal vek are 1 and alphas are 2. In practice, only values of 1 have an effect and prevent the unit from becoming an alpha variant. This is, by default, only used for psions, which have no alpha variants.
 
 
 ----------------------
@@ -87,14 +76,43 @@ local VERSION = "1.0.7"
 -----------------------
 
 --## ffrg_SpawnController.AppendSpawner
--- ( identifier [String],  weak [Boolean, optional], max_pawns [Integer, optional], flying [Boolean, optional], max_level [Integer, optional] )
--- Sets the spawning data on the enemy specified by string to the specified data.
--- Data elements may be identified as nil to indicate no value. Default values of false for the two booleans or 0 for the two integers will have the same effect.
-
---## ffrg_SpawnController.AppendBoomBots
--- ( Data [Array or String] )
--- Adds the specified Boom Bot(s) to the list drawn from for the Boom Bot mission.
--- Accepts both single elements as a string or an array of said elements and does not add elements that are already present.
+-- ( config [Table] )
+-- Sets the spawning data on the enemy specified by string to the specified data, with each option explained below.
+-- identifier [String] indicates the identifier of the pawn type(s) for which the data is being appended.
+-- list [String] indicates which list to append the spawning to.
+    -- "all" is the default choice, and will append the pawn to the lists for all 4 islands (but not the finale)
+    -- "all_finale" will append the pawn to the lists for all 4 islands and the list for the finale
+    -- "archive" is list for Archive Inc.
+    -- "rst" is list for R.S.T. Terraforming.
+    -- "pinnacle" is list for Pinnacle Robotics.
+    -- "detritus" is list for Detritus Disposal.
+    -- "finale" is list for the Vek Hive.
+    -- Other lists may be chosen, though they will not be used by default.
+    -- Any empty string will not append to any lists.
+-- category [String] indicates what category the pawn should be added to for spawning.
+    -- "Core" is the category of the 3 standard Vek that are chosen for each island.
+    -- "Unique" is the category of the 1-2 special Vek that are chosen for island 2 onwards.
+    -- "Leaders" is the category of the single Psion that is chosen for each island.
+    -- "Bots" is the category of the bots that spawn on Pinnacle Robotics.
+    -- Other categories may be chosen, though they have no function by default.
+    -- Being unspecified will not append the non-leader variation of the pawn to any lists.
+-- leader [Boolean] indicates whether spawning data should be appended for the leader version of the pawn. Defaults to false.
+-- leader_override [String] indicates a nonstandard string identifer for the leader mission that should be used instead of the standard formulation.
+-- weak [Boolean] indicates whether the pawn should be considered 'weak' for spawning purposes.
+    -- In general, all Vek that are of the "Core" category are weak, and those of the "Unique" category are not.
+    -- Defaults to true if the category is specified as "Core" and false if the category is specified as "Unique."
+-- max_pawns [Integer] indicates how many pawns of this type should be allowed to spawn per mission.
+    -- For pawns with the "Core" category, this limit will regularly be bypassed when all other pawn caps are reached.
+    -- Defaults to 1 for pawns of category "Leaders"
+-- max_level [Integer] indicates the maximum allowed level for the pawn, where standard is level 1 and alphas are level 2.
+    -- In general, only used for Psions because "Alpha Psions" do not exist.
+    -- Defaults to 1 for pawns of category "Leaders"
+-- flying [Boolean] indicates whether the pawn should be prevented from appearing with other pawns with this specified as true.
+    -- In general, only "Core" or "Unique" Vek that have Flying should have this set to true.
+-- lock [Integer] prevents the pawn from spawning until the player has unlocked this amount of islands.
+-- leader_lock [Integer] prevents the leader variant of the pawn from spawning until the player has unlocked this amount of islands.
+-- boom [Boolean] indicates whether there is a boom variation of the pawn that should be added to the Boom Bot mission.
+    -- Only works for pawns of category "Bots."
 
 --## ffrg_SpawnController.AppendBasicExclusion
 -- ( identifier [String],  exclusion [Array or String] )
@@ -215,6 +233,11 @@ local function ttrg_AddElement(exclusion, element, tail)
 end
 
 
+local ffrg_NonStandardIslandLists = {
+    "Meridia"
+}
+
+
 --////////////////////////////////--
 
 
@@ -226,7 +249,7 @@ end
 --////////////////////////////////--
 
 
-local function ffrg_AppendSpawner(identifier, weak, max_pawns, flying, max_level)
+local function ffrg_AppendSpawnerOld(identifier, weak, max_pawns, flying, max_level)
     if flying and flying == true then
         FlyingEnemies[identifier] = true
     end
@@ -238,6 +261,83 @@ local function ffrg_AppendSpawner(identifier, weak, max_pawns, flying, max_level
     end
     if max_level and max_level > 0 then
         Spawner.max_level[identifier] = max_level
+    end
+end
+
+
+local function ffrg_AppendSpawner(config, ...)
+    if type(config) == "string" then ffrg_AppendSpawnerOld(config, ...) return end
+    config = config or {}
+    if config.identifier == nil or config.identifier == "" then return end
+
+    if config.weak == nil then
+        if config.category and config.category == "Core" then config.weak = true end
+        if config.category and config.category == "Unique" then config.weak = false end
+    end
+    WeakPawns[config.identifier] = config.weak
+    if config.flying then
+        FlyingEnemies[identifier] = true
+    end
+    if ( config.max_pawns and config.max_pawns > 0 ) or config.category and config.category == "Leaders" then
+        Spawner.max_pawns[config.identifier] = config.max_pawns or 1
+    end
+    if ( config.max_level and config.max_level > 0 ) or config.category and config.category == "Leaders" then
+        Spawner.max_level[config.identifier] = config.max_level or 1
+    end
+
+    config.list = config.list or "all"
+    if config.list ~= "" then
+        if config.category then
+            if config.list == "all" or config.list == "all_finale" then
+                for id, list in pairs(easyEdit.enemyList._children) do
+                    if not list_contains(ffrg_NonStandardIslandLists, id) then
+                        if id == "finale" then
+                            if config.list == "all_finale" then
+                                list:addEnemy(config.identifier, "Enemies")
+                            end
+                        else
+                            list:addEnemy(config.identifier, config.category)
+                        end
+                    end
+                end
+            else
+                local list = easyEdit.enemyList:get(config.list)
+                list:addEnemy(config.identifier, config.category)
+            end
+            if config.lock then
+                IslandLocks[config.identifier] = config.lock
+            end
+        end
+        if config.leader then
+            local mission_target = config.leader_override or "Mission_"..config.identifier.."Boss"
+            if config.list == "all" or config.list == "all_finale" then
+                for id, list in pairs(easyEdit.bossList._children) do
+                    if not list_contains(ffrg_NonStandardIslandLists, id) then
+                        if config.list == "all_finale" or ( id ~= "finale1" and id ~= "finale2" ) then
+                            list:addBoss(mission_target)
+                        end
+                    end
+                end
+            else
+                if config.list == "finale" then
+                    local list1 = easyEdit.bossList:get("finale1")
+                    list1:addBoss(mission_target)
+                    local list2 = easyEdit.bossList:get("finale2")
+                    list2:addBoss(mission_target)
+                else
+                    local list = easyEdit.bossList:get(config.list)
+                    list:addBoss(mission_target)
+                end
+            end
+            if config.leader_lock then
+                IslandLocks[mission_target] = config.leaderLock
+            end
+            BossesList[config.identifier.."Boss"] = true
+        end
+    end
+
+    if config.category and config.category == "Bots" and config.boom then
+        ffrg_AppendBoomBots(config.identifier.."1_Boom")
     end
 end
 
@@ -553,6 +653,7 @@ if not ffrg_SpawnController or ( modApi:isVersion(ffrg_SpawnController.version, 
  --[[     Global     ]] ffrg_SpawnController.AppendMyriadExclusion = ffrg_AppendMyriadExclusion
  --[[     Global     ]] ffrg_SpawnController.AddMyriadExclusion = ffrg_AddMyriadExclusion
  --[[     Global     ]] ffrg_SpawnController.ExclusionTail = ffrg_ExclusionTail
+ --[[     Global     ]] ffrg_SpawnController.NonStandardIslandLists = ffrg_NonStandardIslandLists
 
 end
 local function ffrg_onModsInitialized()

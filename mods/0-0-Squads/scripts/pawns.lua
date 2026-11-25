@@ -120,12 +120,12 @@ ANIMS.ffrg_mech_prismw = ANIMS.MechUnit:new{
 }
 ANIMS.ffrg_mech_prism_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_prism_broken.png",
-    PosX = -16,
-    PosY = -10
+    PosX = -14,
+    PosY = -4
 }
 ANIMS.ffrg_mech_prismw_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_prism_w_broken.png",
-    PosX = -16,
+    PosX = -14,
     PosY = 13
 }
 ANIMS.ffrg_mech_prism_ns = ANIMS.MechIcon:new{
@@ -286,28 +286,28 @@ ANIMS.ffrg_mech_upheaval_ns = ANIMS.MechIcon:new{
 ANIMS.ffrg_mech_manifold = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_manifold.png",
     PosX = -19,
-    PosY = -13
+    PosY = -12
 }
 ANIMS.ffrg_mech_manifolda = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_manifold_a.png",
     PosX = -19,
-    PosY = -13,
+    PosY = -12,
     NumFrames = 4
 }
 ANIMS.ffrg_mech_manifoldw = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_manifold_w.png",
     PosX = -19,
-    PosY = 4
+    PosY = 5
 }
 ANIMS.ffrg_mech_manifold_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_manifold_broken.png",
-    PosX = -18,
-    PosY = -5
+    PosX = -15,
+    PosY = -2
 }
 ANIMS.ffrg_mech_manifoldw_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_manifold_w_broken.png",
-    PosX = -18,
-    PosY = 11
+    PosX = -14,
+    PosY = 12
 }
 ANIMS.ffrg_mech_manifold_ns = ANIMS.MechIcon:new{
     Image = "units/player/ffrg_mech_manifold_ns.png"
@@ -317,23 +317,24 @@ ANIMS.ffrg_mech_manifold_ns = ANIMS.MechIcon:new{
 ANIMS.ffrg_mech_razor = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_razor.png",
     PosX = -18,
-    PosY = 1
+    PosY = -1
 }
 ANIMS.ffrg_mech_razora = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_razor_a.png",
     PosX = -18,
-    PosY = 1,
-    NumFrames = 4
+    PosY = -1,
+    NumFrames = 18,
+    Time = 0.1
 }
 ANIMS.ffrg_mech_razorw = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_razor_w.png",
-    PosX = -19,
-    PosY = 12
+    PosX = -17,
+    PosY = 11
 }
 ANIMS.ffrg_mech_razor_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_razor_broken.png",
     PosX = -18,
-    PosY = 4
+    PosY = 3
 }
 ANIMS.ffrg_mech_razorw_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_razor_w_broken.png",
@@ -347,29 +348,29 @@ ANIMS.ffrg_mech_razor_ns = ANIMS.MechIcon:new{
 --== Maintenance Mech ==--
 ANIMS.ffrg_mech_maintenance = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_maintenance.png",
-    PosX = -20,
+    PosX = -19,
     PosY = -6
 }
 ANIMS.ffrg_mech_maintenancea = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_maintenance_a.png",
-    PosX = -20,
+    PosX = -19,
     PosY = -6,
     NumFrames = 4
 }
 ANIMS.ffrg_mech_maintenancew = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_maintenance_w.png",
-    PosX = -18,
-    PosY = 7
+    PosX = -17,
+    PosY = 10
 }
 ANIMS.ffrg_mech_maintenance_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_maintenance_broken.png",
-    PosX = -19,
+    PosX = -17,
     PosY = 0
 }
 ANIMS.ffrg_mech_maintenancew_broken = ANIMS.MechUnit:new{
     Image = "units/player/ffrg_mech_maintenance_w_broken.png",
-    PosX = -18,
-    PosY = 13
+    PosX = -17,
+    PosY = 14
 }
 ANIMS.ffrg_mech_maintenance_ns = ANIMS.MechIcon:new{
     Image = "units/player/ffrg_mech_maintenance_ns.png"
@@ -643,7 +644,7 @@ AddPawnName("ffrg_RazorMech")
 ffrg_MaintenanceMech = Pawn:new{
     Name = "Maintenance Mech",
     Class = "Ranged",
-    Health = 3,
+    Health = 2,
     MoveSpeed = 3,
     Image = "ffrg_mech_maintenance",
     ImageOffset = frenzyPalette,

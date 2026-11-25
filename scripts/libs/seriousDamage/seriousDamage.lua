@@ -21,7 +21,7 @@
 -- Description --
 -----------------
 
-local VERSION = "1.1.5"
+local VERSION = "1.1.6"
 
 --## A library for applying damage and healing that ignores all damage modifiers and does not trigger damage-reliant effects
 
@@ -173,16 +173,18 @@ local function ttrg_TableToString(table)
     if type(table) ~= "table" then return tostring(table) end
     local result = "{"
     for k, v in pairs(table) do
-        local key = type(k) == "string" and string.format("[%q]", k) or "["..k.."]"
-        local value
-        if type(v) == "table" then
-            value = table_to_string(v)
-        elseif type(v) == "string" then
-            value = string.format("%q", v)
-        else
-            value = tostring(v)
+        if type(v) ~= "userdata" then
+            local key = type(k) == "string" and string.format("[%q]", k) or "["..k.."]"
+            local value
+            if type(v) == "table" then
+                value = ttrg_TableToString(v)
+            elseif type(v) == "string" then
+                value = string.format("%q", v)
+            else
+                value = tostring(v)
+            end
+            result = result .. key .. "=" .. value .. ","
         end
-        result = result .. key .. "=" .. value .. ","
     end
     return result .. "}"
 end

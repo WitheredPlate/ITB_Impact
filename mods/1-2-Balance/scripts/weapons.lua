@@ -248,6 +248,14 @@ Support_Repair_Tooltip = SelfTarget:new{
 }
 Support_Repair_Tooltip_A = Support_Repair_Tooltip:new{
     Supply = true,
+    TipImage = {
+        CustomPawn = "ScienceMech",
+        Unit_Damaged = Point(2,3),
+        Target = Point(2,3),
+        Friendly_Damaged = Point(1,1),
+        Friendly2_Damaged = Point(2,1),
+        Length = 5,
+    }
 }
 
 function Support_Repair_Tooltip:GetSkillEffect(p1,p2)
@@ -256,21 +264,21 @@ function Support_Repair_Tooltip:GetSkillEffect(p1,p2)
 	damage.iFire = EFFECT_REMOVE
 	ret:AddDamage(damage)
     if self.Supply then
-        ffrg_Supply.Supply(Point(2,3),Point(2,3),ret,{repair = true, repairAmount = 10, callerPrevent = "Support_Repair"})
+        ffrg_Supply.Supply(Point(2,3),Point(2,3),ret,{repair = 10, callerPrevent = "Support_Repair"})
     end
 
 	damage = SpaceDamage(Point(1,1),-10)
 	damage.iFire = EFFECT_REMOVE
 	ret:AddDamage(damage)
     if self.Supply then
-        ffrg_Supply.Supply(Point(2,3),Point(1,1),ret,{repair = true, repairAmount = 10})
+        ffrg_Supply.Supply(Point(2,3),Point(1,1),ret,{repair = 10})
     end
 
 	damage = SpaceDamage(Point(2,1),-10)
 	damage.iFire = EFFECT_REMOVE
 	ret:AddDamage(damage)
     if self.Supply then
-        ffrg_Supply.Supply(Point(2,3),Point(2,1),ret,{repair = true, repairAmount = 10})
+        ffrg_Supply.Supply(Point(2,3),Point(2,1),ret,{repair = 10})
     end
 
 	return ret

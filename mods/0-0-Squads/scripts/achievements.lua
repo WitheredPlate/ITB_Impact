@@ -403,17 +403,16 @@ local function ffrg_onPawnRevived(mission, pawn)
     end
 end
 
-local ffrg_ignitedUnits = {
-    false,
-    false,
-    false
-}
+local last_attack_order = 0
+local current_attack_order = 0
 
-local function ffrg_onPawnDamaged(mission, pawn, damageTaken)
-    local id = pawn:GetId()
-    if damageTaken ~= 1 or id > 2 then return end
-    if ffrg_ignitedUnits[id] == true then
-        ffrg_ignitedUnits[id] = false
+local function ffrg_onMissionUpdate(mission)
+    last_attack_order = current_attack_order
+    current_attack_order = Board:GetAttackOrder()
+end
+
+local function ffrg_onPawnDamaged(mission,pawn,damageTaken)
+    if isMissionBoard() and not achievements.ffrg_A_Light_Tan:isComplete() and last_attack_order == 1 and ( Board:GetBusyState() == 1 or Board:GetBusyState() == 6 ) and pawn:IsFire() and pawn:IsMech() and damageTaken == 1 then
         GAME.ffrg_FireDamageCount = ( GAME.ffrg_FireDamageCount or 0 ) + 1
         if GAME.ffrg_FireDamageCount >= 6 then
             achievements.ffrg_A_Light_Tan.tooltip = "Take 6 Fire Damage to Mechs in one Mission."
@@ -421,16 +420,6 @@ local function ffrg_onPawnDamaged(mission, pawn, damageTaken)
             GAME.ffrg_FireDamageCount = nil
         else
             achievements.ffrg_A_Light_Tan.tooltip = "Take 6 Fire Damage to Mechs in one Mission.\n\nProgress: "..GAME.ffrg_FireDamageCount.."/6"
-        end
-    end
-end
-
-local function ffrg_TallyFire()
-    if isMissionBoard() and not achievements.ffrg_A_Light_Tan:isComplete() then
-        for id = 0,2 do
-            if Board:GetPawn(id) and Board:GetPawn(id):IsFire() then
-                ffrg_ignitedUnits[id] = true
-            end
         end
     end
 end
@@ -570,24 +559,6 @@ end
 --////////////////////////////////--
 
 
-EXCL = {"GetAmbience", "GetBonusStatus", "BaseUpdate", "UpdateMission", "GetCustomTile", "GetDamage", "GetTurnLimit", "BaseObjectives", "UpdateObjectives",}
-
-for i,v in pairs(Mission) do
-    if type(v) == 'function' then
-        local oldfn = v
-        Mission[i] = function(...)
-			if not list_contains(_G["EXCL"], i) then
-                if i == "IsEnvironmentEffect" then
-                    if Game and Game:GetSquad() == "Frenzy" then
-                        ffrg_TallyFire()
-                    end
-				end
-            end
-            return oldfn(...)
-        end
-    end
-end
-
 local function ffrg_onSquadEnteredGame(squadId)
     if squadId == "ffrg_Architects" then
         modApi.events.onMissionEnd:subscribe(ffrg_onMissionEnd)
@@ -612,6 +583,7 @@ local function ffrg_onSquadEnteredGame(squadId)
     elseif squadId == "ffrg_Frenzy" then
         modApi.events.onMissionEnd:subscribe(ffrg_onMissionEnd2)
         modApi.events.onMissionStart:subscribe(ffrg_onMissionStart2)
+        modApi.events.onMissionUpdate:subscribe(ffrg_onMissionUpdate)
         modApi.events.onPostIslandSelection:subscribe(ffrg_onPostIslandSelection)
         modapiext.events.onResetTurn:subscribe(ffrg_onResetTurn2)
         modapiext.events.onPawnRevived:subscribe(ffrg_onPawnRevived)
@@ -665,6 +637,7 @@ local function ffrg_onSquadExitedGame(squadId)
     elseif squadId == "ffrg_Frenzy" then
         modApi.events.onMissionEnd:unsubscribe(ffrg_onMissionEnd2)
         modApi.events.onMissionStart:unsubscribe(ffrg_onMissionStart2)
+        modApi.events.onMissionUpdate:unsubscribe(ffrg_onMissionUpdate)
         modApi.events.onPostIslandSelection:unsubscribe(ffrg_onPostIslandSelection)
         modapiext.events.onResetTurn:unsubscribe(ffrg_onResetTurn2)
         modapiext.events.onPawnRevived:unsubscribe(ffrg_onPawnRevived)

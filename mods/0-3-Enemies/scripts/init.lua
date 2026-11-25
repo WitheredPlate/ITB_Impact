@@ -12,7 +12,8 @@ local mod = {
 function mod:init()
 	require(self.scriptPath .."weapons")
 	require(self.scriptPath .."pawns")
-	require(self.scriptPath .."missions")
+	require(self.scriptPath .."bosses/bomberbug")
+	require(self.scriptPath .."bosses/caterpillar")
 	require(self.scriptPath .."spawner")
 end
 

@@ -7,10 +7,6 @@ local path = mod_loader.mods[modApi.currentMod].resourcePath
 local imagePath = path .."img/"
 
 local files = {
-    "effects/ffrg_swipe_main.png",
-    "effects/ffrg_swipe_alt.png",
-    "effects/ffrg_saw_main.png",
-    "effects/ffrg_saw_alt.png",
     "effects/ffrg_shot_bullet_U.png",
     "effects/ffrg_shot_bullet_R.png",
     "effects/smoke/ffrg_spark_small.png",
@@ -44,106 +40,6 @@ ANIMS.ffrg_SlabShatter = ANIMS.BaseUnit:new{
     NumFrames = 17,
     Time = 0.07,
     Loop = false
-}
-ANIMS.ffrg_Swipe1 = Animation:new{
-    Image = "effects/ffrg_swipe_main.png",
-    NumFrames = 6,
-    Time = 0.03,
-    PosX = -15,
-    PosY = 6
-}
-ANIMS.ffrg_Swipe2 = Animation:new{
-    Image = "effects/ffrg_swipe_alt.png",
-    NumFrames = 6,
-    Time = 0.03,
-    PosX = -17,
-    PosY = 6
-}
-
--- Saw Timings:
--- Delay 0.1 to Start
--- Damage + Delay 0.1
--- Repeat above per hit
-
-ANIMS.ffrg_Saw1_Main = Animation:new{
-    Image = "effects/ffrg_saw_main.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,6,7,8,9},
-    PosX = -17,
-    PosY = 0
-}
-ANIMS.ffrg_Saw2_Main = Animation:new{
-    Image = "effects/ffrg_saw_main.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,6,7,8,9},
-    PosX = -17,
-    PosY = 0
-}
-ANIMS.ffrg_Saw3_Main = Animation:new{
-    Image = "effects/ffrg_saw_main.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,6,7,8,9},
-    PosX = -17,
-    PosY = 0
-}
-ANIMS.ffrg_Saw4_Main = Animation:new{
-    Image = "effects/ffrg_saw_main.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,4,5,6,7,8,9},
-    PosX = -17,
-    PosY = 0
-}
-ANIMS.ffrg_Saw5_Main = Animation:new{
-    Image = "effects/ffrg_saw_main.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,4,5,4,5,6,7,8,9},
-    PosX = -17,
-    PosY = 0
-}
-ANIMS.ffrg_Saw1_Alt = Animation:new{
-    Image = "effects/ffrg_saw_alt.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,6,7,8,9},
-    PosX = -9,
-    PosY = 0
-}
-ANIMS.ffrg_Saw2_Alt = Animation:new{
-    Image = "effects/ffrg_saw_alt.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,6,7,8,9},
-    PosX = -9,
-    PosY = 0
-}
-ANIMS.ffrg_Saw3_Alt = Animation:new{
-    Image = "effects/ffrg_saw_alt.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,6,7,8,9},
-    PosX = -9,
-    PosY = 0
-}
-ANIMS.ffrg_Saw4_Alt = Animation:new{
-    Image = "effects/ffrg_saw_alt.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,4,5,6,7,8,9},
-    PosX = -9,
-    PosY = 0
-}
-ANIMS.ffrg_Saw5_Alt = Animation:new{
-    Image = "effects/ffrg_saw_alt.png",
-    NumFrames = 10,
-    Time = 0.05,
-    Frames = {0,1,2,3,4,5,4,5,4,5,4,5,6,7,8,9},
-    PosX = -9,
-    PosY = 0
 }
 
 ffrg_Emitter_SparkSmall_Saw_Main = Emitter:new{

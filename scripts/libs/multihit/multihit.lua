@@ -42,6 +42,8 @@ local VERSION = "1.2.5"
     -- Required for queued multihit attacks
 --## customProjectile.lua 1.0.1
     -- Required for animated multihit projectile attacks
+--## worldConstants.lua (Modified, just grab the one from Arsenal or Impact)
+    -- Required for speed-scaled multihit projectile attacks
 
 
 ----------------------
@@ -1863,21 +1865,21 @@ local function MultihitProjectile(damage, attacks, point, dir, config)
                             pushDamage.bHide = true
                             if config.queued then
                                 config.ret:AddQueuedDamage(pointDamage)
-                                config.ret:AddQueuedProjectile(proj_damage, config.proj_art, 0)
-                                config.ret:AddQueuedProjectile(pushDamage, "", math.max(delay_extra, config.delay))
+                                config.ret:AddQueuedProjectile(pushDamage, "", 0)
+                                config.ret:AddQueuedProjectile(proj_damage, config.proj_art, math.max(delay_extra, config.delay))
                             else
                                 config.ret:AddDamage(pointDamage)
+                                config.ret:AddProjectile(point, pushDamage, "", 0)
                                 if config.custom_projectile and ffrg_CustomProjectile then
                                     if config.projectile_speed and ffrg_WorldConstants then
                                         ffrg_CustomProjectile.AddCustomProjectile(point, curr, config.proj_art, {ret = config.ret, speed = config.projectile_speed})
                                     else
                                         ffrg_CustomProjectile.AddCustomProjectile(point, curr, config.proj_art, {ret = config.ret})
                                     end
-                                    config.ret:AddProjectile(point, proj_damage, "", 0)
+                                    config.ret:AddProjectile(point, proj_damage, "", math.max(delay_extra, config.delay))
                                 else
-                                    config.ret:AddProjectile(point, proj_damage, config.proj_art, 0)
+                                    config.ret:AddProjectile(point, proj_damage, config.proj_art, math.max(delay_extra, config.delay))
                                 end
-                                config.ret:AddProjectile(point, pushDamage, "", math.max(delay_extra, config.delay))
                             end
                         else
                             if config.queued then

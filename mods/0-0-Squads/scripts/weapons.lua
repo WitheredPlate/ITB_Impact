@@ -593,7 +593,7 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
 
     local impacts = {}
     local ignition = SpaceDamage(p1, self.SelfDamage)
-    ignition.sAnimation = "ExploAir2"
+    ignition.sAnimation = "ffrg_exploflip_0"
     ignition.sSound = self.SelfSound
     ignition.fDelay = 0
     if throws.front == true then
@@ -607,7 +607,6 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
         else
             ret:AddDamage(SoundEffect(p1,self.Sound))
         end
-        ret:AddBounce(p1,3)
         ret:AddBounce(curr,-4)
         local move = PointList()
         move:push_back(curr)
@@ -637,7 +636,6 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
             else
                 ret:AddDamage(SoundEffect(p1,self.Sound))
             end
-            ret:AddBounce(p1,6)
             for _, curr in ipairs(sideThrows) do
                 local curr2 = curr + DIR_VECTORS[direction]*distance
                 ret:AddBounce(curr,-4)
@@ -661,7 +659,6 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
             else
                 ret:AddDamage(SoundEffect(p1,self.Sound))
             end
-            ret:AddBounce(p1,3)
             ret:AddBounce(curr,-4)
             local move = PointList()
             move:push_back(curr)
@@ -680,7 +677,6 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
         ret:AddMelee(p1, damage, 0.15)
         table.insert(impacts,0.15)
         ret:AddDamage(SoundEffect(p1,self.FinalSound))
-        ret:AddBounce(p1,3)
         ret:AddBounce(curr,-4)
         local move = PointList()
         move:push_back(curr)
@@ -693,6 +689,7 @@ function ffrg_Prime_TC_MultiToss:GetFinalEffect(p1, p2, p3)
     end
 
     ret:AddDamage(ignition)
+    ret:AddBounce(p1,3)
 
     if tosses == 1  then
         ret:AddDelay(0.6)
@@ -730,7 +727,8 @@ ffrg_Brute_SawCharge = Skill:new{
     Class = "Brute",
     Icon = "weapons/ffrg_brute_sawcharge.png",
     Damage = 1,
-    OuterAnimation = "ffrg_Saw1",
+    OuterAnimation = "ffrg_Saw",
+    SawDuration = 1,
     IgniteAnimation = "explo_fire1",
     BuildingDamage = true,
     ChargeSound = "weapons/charge",
@@ -794,15 +792,14 @@ end
 function ffrg_Brute_SawCharge:GetSkillEffect(p1,p2)
 	local ret = SkillEffect()
 	local dir = GetDirection(p2 - p1)
-    local append = ""
-    if dir == 0 or dir == 1 then append = "_Main"
-    else append = "_Alt" end
+    local append = 1
+    if dir == 0 or dir == 1 then append = 0 end
 
 	local distance = p1:Manhattan(p2)
     local damage = SpaceDamage(p1, self.Damage, DIR_FLIP)
     local anim = SpaceDamage(p1, 0)
     anim.bHide = true
-    anim.sAnimation = self.OuterAnimation..append
+    anim.sAnimation = self.OuterAnimation..append.."_"..self.SawDuration
 
     local ignition = SpaceDamage(p1,0)
     ignition.iFire = 1
@@ -1066,6 +1063,7 @@ ffrg_Ranged_TC_Maintenance = LineArtillery:new{
     ShieldAlly = false,
     TwoClick = true,
     Push = 1,
+    PowerCost = 1,
     Upgrades = 2,
     UpgradeCost = {1,2},
     TipImage = {
@@ -1213,8 +1211,8 @@ ffrg_Science_KO_Shred = Skill:new{
     TipDamageCustom = "1",
     Attacks = 1,
     Sound = "/weapons/crack",
-    Animation = "ffrg_Swipe2",
-    AlternateAnimation = "ffrg_Swipe1",
+    Animation = "ffrg_Swipe1",
+    AlternateAnimation = "ffrg_Swipe0",
     Upgrades = 1,
     UpgradeCost = {3},
     TipImage = {
@@ -1842,6 +1840,16 @@ function ffrg_Passive_Phoenix:Boost(point)
     Board:GetPawn(point):SetBoosted(true)
 end
 
+local function ffrg_ReviveNameSet(...)
+    if IsPassiveSkill("Passive_Medical_ffrg_Phoenix") then
+        modApi:setText("PilotNews_Revived","                SURVIVED")
+        modApi:setText("PilotNews_ReviveText","The Contingency Cache allowed $1 to survive the destruction of their Mech.")
+    else
+        modApi:setText("PilotNews_Revived","REVIVED")
+        modApi:setText("PilotNews_ReviveText","The Emergency Medical Supplies were able to save $1 from the brink of death!")
+    end
+end
+
 local function ffrg_onPawnRevived(mission, pawn)
     if IsPassiveSkill("Passive_Medical_ffrg_Phoenix") and pawn:IsMech() then
         pawn:SetBoosted(true)
@@ -1856,6 +1864,8 @@ local function ffrg_onPawnRevived(mission, pawn)
 end
 
 modapiext.events.onPawnRevived:subscribe(ffrg_onPawnRevived)
+modApi.events.onMissionEnd:subscribe(ffrg_ReviveNameSet)
+modApi.events.onGameEntered:subscribe(ffrg_ReviveNameSet)
 
 --////////////////////////////////--
 

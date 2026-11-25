@@ -32,18 +32,6 @@ local imagePath = path .."img/"
 local files = {
     "effects/ffrg_chomp_main.png",
     "effects/ffrg_chomp_alt.png",
-    "effects/ffrg_explo_bomberbug1_U.png",
-    "effects/ffrg_explo_bomberbug1_R.png",
-    "effects/ffrg_explo_bomberbug1_D.png",
-    "effects/ffrg_explo_bomberbug1_L.png",
-    "effects/ffrg_explo_bomberbug2_U.png",
-    "effects/ffrg_explo_bomberbug2_R.png",
-    "effects/ffrg_explo_bomberbug2_D.png",
-    "effects/ffrg_explo_bomberbug2_L.png",
-    "effects/ffrg_explo_bomberbugB_U.png",
-    "effects/ffrg_explo_bomberbugB_R.png",
-    "effects/ffrg_explo_bomberbugB_D.png",
-    "effects/ffrg_explo_bomberbugB_L.png",
     "effects/ffrg_shot_bomberbug1_U.png",
     "effects/ffrg_shot_bomberbug1_R.png",
     "effects/ffrg_shot_bomberbug2_U.png",
@@ -56,90 +44,6 @@ for _, file in ipairs(files) do
     modApi:appendAsset("img/".. file, imagePath .. file)
 end
 
-ANIMS.ffrg_ExploBomberbug1_0 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug1_U.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -14
-}
-ANIMS.ffrg_ExploBomberbug1_1 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug1_R.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbug1_2 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug1_D.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbug1_3 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug1_L.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -14
-}
-ANIMS.ffrg_ExploBomberbug2_0 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug2_U.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -14
-}
-ANIMS.ffrg_ExploBomberbug2_1 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug2_R.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbug2_2 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug2_D.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbug2_3 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbug2_L.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -14
-}
-ANIMS.ffrg_ExploBomberbugB_0 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbugB_U.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -14
-}
-ANIMS.ffrg_ExploBomberbugB_1 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbugB_R.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -15,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbugB_2 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbugB_D.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -2
-}
-ANIMS.ffrg_ExploBomberbugB_3 = Animation:new{
-    Image = "effects/ffrg_explo_bomberbugB_L.png",
-    NumFrames = 8,
-    Time = 0.05,
-    PosX = -41,
-    PosY = -14
-}
 ANIMS.ffrg_Chomp1 = Animation:new{
     Image = "effects/ffrg_chomp_main.png",
     NumFrames = 8,
@@ -180,7 +84,7 @@ ffrg_BomberbugAtk1 = Skill:new{
     LaunchSound = "",
     Sound = "/enemy/firefly_soldier_1/attack",
     HitSound = "/impact/dynamic/enemy_projectile",
-    Animation = "ffrg_ExploBomberbug1_",
+    Animation = "ffrg_ExploFireflyPush1_",
     Projectiles = 2,
     IgniteBehind = false,
     Damage2 = 1,
@@ -214,7 +118,7 @@ ffrg_BomberbugAtk2 = ffrg_BomberbugAtk1:new{
     Name = "Scalding Expulsion",
     Description = "Fire two damaging and pushing projectiles in sequence.",
     ProjectileArt = "effects/ffrg_shot_bomberbug2",
-    Animation = "ffrg_ExploBomberbug2_",
+    Animation = "ffrg_ExploFireflyPush2_",
     Damage2 = 2,
     TipDamageCustom = "2x2",
     TipImage = {
@@ -230,7 +134,7 @@ ffrg_BomberbugAtkB = ffrg_BomberbugAtk1:new{
     Name = "Igneous Expulsion",
     Description = "Fire three damaging and pushing projectiles in sequence. Ignite the tile behind the user.",
     ProjectileArt = "effects/ffrg_shot_bomberbugB",
-    Animation = "ffrg_ExploBomberbugB_",
+    Animation = "ffrg_ExploFireflyPushB_",
     Damage2 = 2,
     Projectiles = 3,
     IgniteBehind = true,
@@ -337,7 +241,7 @@ ffrg_CaterpillarAtkB = ffrg_CaterpillarAtk1:new{
 ----------------------
 
 ffrg_SnowshredAtk1 = Skill:new{
-    Name = "shR30 Processor Mark 1",
+    Name = "shR30 Processor Mark I",
     Class = "Enemy",
     Description = "Attack an adjacent tile three times.",
     PathSize = 1,
@@ -346,8 +250,8 @@ ffrg_SnowshredAtk1 = Skill:new{
     Attacks = 3,
     LaunchSound = "",
     Sound = "/impact/generic/arachnoid",
-    Animation = "ffrg_Swipe1",
-    AlternateAnimation = "ffrg_Swipe2",
+    Animation = "ffrg_Swipe0",
+    AlternateAnimation = "ffrg_Swipe1",
     TipImage = {
         Unit = Point(2,2),
         Enemy = Point(2,1),
@@ -357,13 +261,13 @@ ffrg_SnowshredAtk1 = Skill:new{
 }
 
 function ffrg_SnowshredAtk1:GetSkillEffect(p1, p2)
-local ret = SkillEffect()
-ffrg_Multihit.MultihitMelee(self.Damage2, self.Attacks, p2, {mode = "simple", queued = true, origin = p1, ret = ret, delay = 0.15, sfx = self.Sound, anim = self.Animation, anim_alt = self.AlternateAnimation})
-return ret
+    local ret = SkillEffect()
+    ffrg_Multihit.MultihitMelee(self.Damage2, self.Attacks, p2, {mode = "simple", queued = true, origin = p1, ret = ret, delay = 0.15, sfx = self.Sound, anim = self.Animation, anim_alt = self.AlternateAnimation})
+    return ret
 end
 
 ffrg_SnowshredAtk2 = ffrg_SnowshredAtk1:new{
-    Name = "shR30 Processor Mark 2",
+    Name = "shR30 Processor Mark II",
     Description = "Attack an adjacent tile five times.",
     TipDamageCustom = "1x5",
     Attacks = 5,

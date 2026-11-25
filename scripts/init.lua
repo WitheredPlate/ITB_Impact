@@ -5,31 +5,43 @@ local mod = {
     name = "",
     description = "-- Impact --\n\nA content pack that implements Multihit Attacks and Supplying.\n\nBy WitheredPlate\n",
     version = ffrg_impact_version,
-    modApiVersion = "2.8.3",
+    modApiVersion = "2.9.7",
     gameVersion = "1.2.83",
     icon = "img/icons/mod_version.png",
     dependencies = {
-        memedit = "1.2.0",
-        modApiExt = "1.23",
+        memedit = "1.2.3",
+        modApiExt = "1.25",
     },
     submodFolders = {"mods/"},
     load = function() end
 }
 local libs = {
+
+    -- Other's Technicals
+    "worldConstants",
+    "artilleryArc",
+    "weaponPreview",
+    "replaceRepair/replaceRepair",
+
+    -- My Technicals
     "tipTracker",
     "queuedPreview",
-    "weaponPreview",
-    "worldConstants",
     "seriousDamage/seriousDamage",
     "customProjectile/customProjectile",
-    --"customClass",
     "spawnController",
-    "artilleryArc",
+
+    -- My Features
     "multihit/multihit",
     "supply/supply",
+
+    -- My Helpers
+    "pilotFactory",
+    "platedAssets/platedAssets"
+
 }
 local templates = {
     "coordinatedStrike",
+    "deployable"
 }
 
 function mod:init(options)
@@ -43,7 +55,8 @@ function mod:init(options)
 		self.templates[templateId] = require(path.."templates/"..templateId)
 	end
 	require(self.scriptPath .."weapons")
-    require(self.scriptPath .."pawns")
+    require(self.scriptPath .."tutorials")
+
 end
 
 return mod

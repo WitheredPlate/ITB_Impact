@@ -232,9 +232,9 @@ ffrg_Bomberbug1 = Pawn:new{
 AddPawnName("ffrg_Bomberbug1")
 modApi:setText("ffrg_Bomberbug1", "Bomberbug")
 
------------------------
--- Alpha Caterpillar --
------------------------
+---------------------
+-- Alpha Bomberbug --
+---------------------
 
 ffrg_Bomberbug2 = ffrg_Bomberbug1:new{
     Name = "Alpha Bomberbug",
@@ -275,7 +275,7 @@ modApi:setText("ffrg_BomberbugBoss", "Bomberbug Leader")
 ffrg_Caterpillar1 = Pawn:new{
     Name = "Caterpillar",
     Health = 2,
-    MoveSpeed = 3,
+    MoveSpeed = 4,
     Image = "ffrg_caterpillar",
     SkillList = { "ffrg_CaterpillarAtk1" },
     SoundLocation = "/enemy/beetle_1/",

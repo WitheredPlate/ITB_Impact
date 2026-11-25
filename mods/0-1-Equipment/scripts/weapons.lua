@@ -65,10 +65,6 @@ local files = {
     "effects/ffrg_explo_hammer_R.png",
     "effects/ffrg_explo_hammer_D.png",
     "effects/ffrg_explo_hammer_L.png",
-    "effects/ffrg_explo_flechette_U.png",
-    "effects/ffrg_explo_flechette_R.png",
-    "effects/ffrg_explo_flechette_D.png",
-    "effects/ffrg_explo_flechette_L.png",
     "effects/ffrg_repulsepush1_U.png",
     "effects/ffrg_repulsepush1_R.png",
     "effects/ffrg_repulsepush1_D.png",
@@ -103,7 +99,7 @@ local files = {
     "effects/ffrg_lasermult1_U.png",
     "effects/ffrg_lasermult1_U1.png",
     "effects/ffrg_lasermult1_U2.png",
-    "effects/ffrg_shotup_lightmortar.png"
+    "effects/ffrg_shotup_lightmortar.png",
 }
 
 for _, file in ipairs(files) do
@@ -150,36 +146,6 @@ ANIMS.ffrg_Explo_Hammer_3 = Animation:new{
     Lengths = {0.08, 0.08, 0.08, 0.06, 0.06, 0.04, 0.04, 0.04, 0.06, 0.12, 0.12, 0.06},
     PosX = -8,
     PosY = -2
-}
-
---== Flechette Accelerator ==--
-ANIMS.ffrg_Explo_Flechette_0 = Animation:new{
-    Image = "effects/ffrg_explo_flechette_U.png",
-    NumFrames = 10,
-    Time = 0.06,
-    PosX = -11,
-    PosY = 0
-}
-ANIMS.ffrg_Explo_Flechette_1 = Animation:new{
-    Image = "effects/ffrg_explo_flechette_R.png",
-    NumFrames = 10,
-    Time = 0.06,
-    PosX = -11,
-    PosY = 9
-}
-ANIMS.ffrg_Explo_Flechette_2 = Animation:new{
-    Image = "effects/ffrg_explo_flechette_D.png",
-    NumFrames = 10,
-    Time = 0.06,
-    PosX = -19,
-    PosY = 9
-}
-ANIMS.ffrg_Explo_Flechette_3 = Animation:new{
-    Image = "effects/ffrg_explo_flechette_L.png",
-    NumFrames = 10,
-    Time = 0.06,
-    PosX = -19,
-    PosY = 0
 }
 
 --== Gravity Manipulator ==--
@@ -288,42 +254,42 @@ ANIMS.ffrg_Explo_PushVortex_3 = Animation:new{
 }
 
 --== Horus Drill ==--
-ANIMS.explodrill2 = Animation:new{
+ANIMS.ffrg_explodrill2 = Animation:new{
     Image = "effects/ffrg_burrow_drill.png",
     NumFrames = 9,
     Time = 0.05,
     PosX = -20,
     PosY = -12
 }
-ANIMS.explodrill3 = Animation:new{
+ANIMS.ffrg_explodrill3 = Animation:new{
     Image = "effects/ffrg_burrow_drill_miss.png",
     NumFrames = 9,
     Time = 0.05,
     PosX = -20,
     PosY = -12
 }
-ANIMS.explohorus_0 = Animation:new{
+ANIMS.ffrg_explohorus_0 = Animation:new{
     Image = "effects/ffrg_explo_horus_U.png",
     NumFrames = 8,
     Time = 0.04,
     PosX = -22,
     PosY = -56
 }
-ANIMS.explohorus_1 = Animation:new{
+ANIMS.ffrg_explohorus_1 = Animation:new{
     Image = "effects/ffrg_explo_horus_R.png",
     NumFrames = 8,
     Time = 0.04,
     PosX = -23,
     PosY = 0
 }
-ANIMS.explohorus_2 = Animation:new{
+ANIMS.ffrg_explohorus_2 = Animation:new{
     Image = "effects/ffrg_explo_horus_D.png",
     NumFrames = 8,
     Time = 0.04,
     PosX = -73,
     PosY = 0
 }
-ANIMS.explohorus_3 = Animation:new{
+ANIMS.ffrg_explohorus_3 = Animation:new{
     Image = "effects/ffrg_explo_horus_L.png",
     NumFrames = 8,
     Time = 0.04,
@@ -367,7 +333,8 @@ ffrg_Prime_Shred = Skill:new{
     Attacks = 4,
     StartSound = "/mech/prime/punch_mech/death",
     Sound = "/support/shield/death",
-    StartAnimation = "ffrg_Saw4",
+    StartAnimation = "ffrg_Saw",
+    SawDuration = 4,
     Upgrades = 2,
     UpgradeCost = {1,3},
     TipImage = {
@@ -382,7 +349,7 @@ ffrg_Prime_Shred_A = ffrg_Prime_Shred:new{
     UpgradeDescription = "Increases the number of attacks by 1.",
     Attacks = 5,
     TipDamageCustom = "1x5",
-    StartAnimation = "ffrg_Saw5",
+    SawDuration = 5,
 }
 
 ffrg_Prime_Shred_B = ffrg_Prime_Shred:new{
@@ -400,7 +367,7 @@ ffrg_Prime_Shred_B = ffrg_Prime_Shred:new{
 ffrg_Prime_Shred_AB = ffrg_Prime_Shred:new{
     Attacks = 5,
     TipDamageCustom = "1x5",
-    StartAnimation = "ffrg_Saw5",
+    SawDuration = 5,
     PathSize = 2,
     TipImage = {
         Unit = Point(2,3),
@@ -434,12 +401,11 @@ function ffrg_Prime_Shred:GetSkillEffect(p1, p2)
     local direction = GetDirection(p2 - p1)
     local distance = p1:Manhattan(p2)
     local start = SpaceDamage(p2,0)
-    local append = ""
-    if direction == 0 or direction == 1 then append = "_Main"
-    else append = "_Alt" end
+    local append = 1
+    if direction == 0 or direction == 1 then append = 0 end
     start.bHide = true
     start.sSound = self.StartSound
-    start.sAnimation = self.StartAnimation..append
+    start.sAnimation = self.StartAnimation..append.."_"..self.SawAnimation
     ret:AddDamage(start)
     if distance > 1 then
         start.sSound = ""
@@ -678,6 +644,7 @@ ffrg_Prime_Maul = Skill:new{
     ImpactSound = "/props/airstrike_explosion",
     ImpactSound2 = "/mech/brute/doubletank_mech/death",
     Animation = "ffrg_Explo_Hammer_",
+    OuterAnimation = "ffrg_airflip_0",
     Upgrades = 1,
     Limited = 1,
     UpgradeCost = {3},
@@ -705,40 +672,40 @@ ffrg_Emitter_Crack_Hammer = Emitter_Crack_Start:new{
     speed = 4.5,
     gravity = true,
     variance_x = 36,
-    variance_y = 20,
+    variance_y = 36,
     lifespan = 1.8,
     angle = 293,
     angle_variance = 46,
 }
 
-local wind_variance = 90
-local wind_verticality = 0.5
-
-ffrg_Emitter_Wind_Hammer_0 = Emitter:new{
-    image = "combat/tiles_grass/particle.png",
-    x = 0,
-    y = 20,
-    max_alpha = 0.15,
-    burst_count = 50,
-    angle = -36.25 - (wind_verticality*53.75) + (wind_variance/2),
-    variance_x = 44,
-    variance_y = 30,
-    angle_variance = wind_variance,
-    lifespan = 0.5,
-    burst_count = 25,
-    speed = 4.5,
-    gravity = true,
-    layer = LAYER_BACK
-}
-ffrg_Emitter_Wind_Hammer_1 = ffrg_Emitter_Wind_Hammer_0:new{
-    angle = 36.25 - (wind_verticality*126.25) + (wind_variance/2)
-}
-ffrg_Emitter_Wind_Hammer_2 = ffrg_Emitter_Wind_Hammer_0:new{
-    angle = 143.75 + (wind_verticality*126.25) + (wind_variance/2)
-}
-ffrg_Emitter_Wind_Hammer_3 = ffrg_Emitter_Wind_Hammer_0:new{
-    angle = -143.75 + (wind_verticality*53.75) + (wind_variance/2)
-}
+-- local wind_variance = 90
+-- local wind_verticality = 0.5
+--
+-- ffrg_Emitter_Wind_Hammer_0 = Emitter:new{
+--     image = "combat/tiles_grass/particle.png",
+--     x = 0,
+--     y = 20,
+--     max_alpha = 0.15,
+--     burst_count = 50,
+--     angle = -36.25 - (wind_verticality*53.75) + (wind_variance/2),
+--     variance_x = 44,
+--     variance_y = 30,
+--     angle_variance = wind_variance,
+--     lifespan = 0.5,
+--     burst_count = 25,
+--     speed = 4.5,
+--     gravity = true,
+--     layer = LAYER_BACK
+-- }
+-- ffrg_Emitter_Wind_Hammer_1 = ffrg_Emitter_Wind_Hammer_0:new{
+--     angle = 36.25 - (wind_verticality*126.25) + (wind_variance/2)
+-- }
+-- ffrg_Emitter_Wind_Hammer_2 = ffrg_Emitter_Wind_Hammer_0:new{
+--     angle = 143.75 + (wind_verticality*126.25) + (wind_variance/2)
+-- }
+-- ffrg_Emitter_Wind_Hammer_3 = ffrg_Emitter_Wind_Hammer_0:new{
+--     angle = -143.75 + (wind_verticality*53.75) + (wind_variance/2)
+-- }
 
 function ffrg_Prime_Maul:GetSkillEffect(p1, p2)
     local ret = SkillEffect()
@@ -749,6 +716,7 @@ function ffrg_Prime_Maul:GetSkillEffect(p1, p2)
     damage_anim.sAnimation = self.Animation..direction
     damage.sSound = self.ImpactSound
     local damage_outer = SpaceDamage(p2, 0, DIR_FLIP)
+    local anim_outer = SpaceDamage(p2, 0)
     ret:AddDelay(0.55)
     ret:AddDamage(damage_anim)
     ret:AddDelay(0.35)
@@ -759,13 +727,23 @@ function ffrg_Prime_Maul:GetSkillEffect(p1, p2)
     ret:AddScript("Board:AddBurst("..p2:GetString()..",\"ffrg_Emitter_Crack_Hammer\",DIR_NONE)")
     ret:AddBounce(p2, 6)
     ret:AddDamage(SoundEffect(p1,self.ImpactSound2))
-    ret:AddDelay(0.25)
+    ret:AddDelay(0.1)
+    for i = 0, 3 do
+        curr = p2 + DIR_VECTORS[i]
+        if Board:IsValid(curr) and curr ~= p1 then
+            local dir = GetDirection(curr - p2)
+            anim_outer.loc = curr
+            anim_outer.sAnimation = self.OuterAnimation
+            ret:AddDamage(anim_outer)
+        end
+    end
+    ret:AddDelay(0.1)
     for i = 0, 3 do
         curr = p2 + DIR_VECTORS[i]
         if Board:IsValid(curr) and curr ~= p1 then
             ret:AddBounce(curr, -2)
             local dir = GetDirection(curr - p2)
-            ret:AddScript("Board:AddBurst("..curr:GetString()..",\"ffrg_Emitter_Wind_Hammer_"..dir.."\",DIR_NONE)")
+            --ret:AddScript("Board:AddBurst("..curr:GetString()..",\"ffrg_Emitter_Wind_Hammer_"..dir.."\",DIR_NONE)")
             damage_outer.loc = curr
             ret:AddDamage(damage_outer)
         end
@@ -790,7 +768,7 @@ ffrg_Brute_Flechette = Skill:new{
     HitSound = "impact/generic/ricochet",
     FinalHitSound = "weapons/brute_ko_combo",
     HitAnimation = "",
-    FinalHitAnimation = "ffrg_Explo_Flechette_",
+    FinalHitAnimation = "ffrg_explolong_",
     BuildingImmune = false,
     ProjectileSpeed = 16,
     Upgrades = 2,
@@ -1118,8 +1096,8 @@ ffrg_Ranged_TC_Silica = LineArtillery:new{
     Class = "Ranged",
     Icon = "weapons/ffrg_ranged_silica.png",
     Explosion = "",
-    DrillArt = "explodrill2",
-    DrillMissArt = "explodrill3",
+    DrillArt = "ffrg_explodrill2",
+    DrillMissArt = "ffrg_explodrill3",
     ProjArt = "effects/ffrg_shotup_horusdrill.png",
     LaunchSound = "/weapons/back_shot",
     DrillSound = "/weapons/crack_ko",
@@ -1301,7 +1279,7 @@ function ffrg_Ranged_TC_Silica:GetFinalEffect(p1, p2, p3)
             local damagef = SpaceDamage(p3,self.Damage)
             damagef.iPush = direction
             damagef.sSound = self.SurfaceSound
-            damagef.sAnimation = "explohorus_"..direction
+            damagef.sAnimation = "ffrg_explohorus_"..direction
             ret:AddDamage(damagef)
             ret:AddBurst(p3,"Emitter_Burst_$tile",DIR_NONE)
         else
@@ -1895,15 +1873,12 @@ modapiext.events.onSkillStart:subscribe(ffrg_onSkillBuild)
 -- Turrets --
 -------------
 
-ffrg_Support_DeployCannonTurret = Skill:new{
+ffrg_Support_DeployCannonTurret = ffrg_DeployableBase:new{
     Name = "Cannon Turret",
     Description = "Deploy a Cannon Turret. It can fire a barrage of damaging projectiles.",
-    Class = "",
     Icon = "weapons/ffrg_support_deploycannonturret.png",
     Deployed = "ffrg_CannonTurret",
     Anim = "ffrg_turret_cannone",
-    WhirrSound = "mech/prime/bottlecap_mech/death",
-    TwoClick = false,
     Limited = 1,
     Upgrades = 2,
     UpgradeCost = {2,3},
@@ -1950,82 +1925,14 @@ ffrg_Support_DeployCannonTurret_AB = ffrg_Support_DeployCannonTurret:new{
 Weapon_Texts.ffrg_Support_DeployCannonTurret_Upgrade1 = "+1 Projectile"
 Weapon_Texts.ffrg_Support_DeployCannonTurret_Upgrade2 = "+1 Turret"
 
-function ffrg_Support_DeployCannonTurret:GetTargetArea(point)
-    local ret = PointList()
-    for i = 0, 3 do
-        curr = point+DIR_VECTORS[i]
-        if Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
-            ret:push_back(curr)
-        end
-    end
-    return ret
-end
-
-function ffrg_Support_DeployCannonTurret:GetSkillEffect(p1,p2)
-    local ret = SkillEffect()
-    local anim = SpaceDamage(p2,0)
-    local damage = SpaceDamage(p2,0)
-    damage.sPawn = self.Deployed
-    anim.sAnimation = self.Anim
-    anim.sSound = self.WhirrSound
-    ret:AddDamage(anim)
-    ret:AddDelay(1.12)
-    ret:AddDamage(damage)
-    return ret
-end
-
-function ffrg_Support_DeployCannonTurret:IsTwoClickException(p1,p2)
-    local counter = 0
-    for i = 0, 3 do
-        curr = p1+DIR_VECTORS[i]
-        if Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
-            counter = counter + 1
-        end
-    end
-    if counter > 1 then return false end
-	return true
-end
-
-function ffrg_Support_DeployCannonTurret:GetSecondTargetArea(p1,p2)
-    local ret = PointList()
-    for i = 0, 3 do
-        curr = p1+DIR_VECTORS[i]
-        if curr ~= p2 and Board:IsValid(curr) and not Board:IsBlocked(curr,PATH_GROUND) then
-            ret:push_back(curr)
-        end
-    end
-    return ret
-end
-
-function ffrg_Support_DeployCannonTurret:GetFinalEffect(p1,p2,p3)
-    local ret = SkillEffect()
-    local damage = SpaceDamage(p2,0)
-    local anim = SpaceDamage(p2,0)
-    damage.sPawn = self.Deployed
-    anim.sSound = self.WhirrSound
-    anim.sAnimation = self.Anim
-    local damage2 = SpaceDamage(p3,0)
-    local anim2 = SpaceDamage(p3,0)
-    damage2.sPawn = self.Deployed
-    anim2.sSound = self.WhirrSound
-    anim2.sAnimation = self.Anim
-    ret:AddDamage(anim)
-    ret:AddDelay(0.4)
-    ret:AddDamage(anim2)
-    ret:AddDelay(0.72)
-    ret:AddDamage(damage)
-    ret:AddDelay(0.4)
-    ret:AddDamage(damage2)
-    return ret
-end
-
-
-ffrg_Support_DeployMortarTurret = ffrg_Support_DeployCannonTurret:new{
+ffrg_Support_DeployMortarTurret = ffrg_DeployableBase:new{
     Name = "Mortar Turret",
     Description = "Deploy a Mortar Turret. It can fire damaging and pushing artilleries.",
     Icon = "weapons/ffrg_support_deploymortarturret.png",
     Deployed = "ffrg_MortarTurret",
     Anim = "ffrg_turret_mortare",
+    Limited = 1,
+    Upgrades = 2,
     UpgradeCost = {3,3},
     TipImage = {
         Unit = Point(1,3),
@@ -2038,7 +1945,7 @@ ffrg_Support_DeployMortarTurret = ffrg_Support_DeployCannonTurret:new{
 }
 
 ffrg_Support_DeployMortarTurret_A = ffrg_Support_DeployMortarTurret:new{
-    UpgradeDescription = "Increases the dealt by the Mortar Turret by 1.",
+    UpgradeDescription = "Increases the damage dealt by the Mortar Turret by 1.",
     Deployed = "ffrg_MortarTurretA"
 }
 
@@ -2074,12 +1981,14 @@ Weapon_Texts.ffrg_Support_DeployMortarTurret_Upgrade1 = "+1 Damage"
 Weapon_Texts.ffrg_Support_DeployMortarTurret_Upgrade2 = "+1 Turret"
 
 
-ffrg_Support_DeployFlamerTurret = ffrg_Support_DeployCannonTurret:new{
+ffrg_Support_DeployFlamerTurret = ffrg_DeployableBase:new{
     Name = "Flamer Turret",
     Description = "Deploy a Flamer Turret. It can push and ignite multiple tiles.",
     Icon = "weapons/ffrg_support_deployflamerturret.png",
     Deployed = "ffrg_FlamerTurret",
     Anim = "ffrg_turret_flamere",
+    Limited = 1,
+    Upgrades = 2,
     TipImage = {
         Unit = Point(1,3),
         Target = Point(1,2),
